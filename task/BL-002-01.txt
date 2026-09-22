@@ -1,0 +1,40 @@
+TASK ID: BL-002-01
+TITLE: Repository Product Variant
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-002 — Product Variant (master data)
+REQUIREMENTS: FR-PR-001, FR-PR-003, FR-PR-004, FR-PR-007; BR-PR-001 s.d. BR-PR-006; `05-Data-Model.md` §6
+ACCEPTANCE CRITERIA: AC-PR-001, AC-PR-003, AC-DI-005 (pemilik referensi data)
+
+SCOPE:
+list (opsi includeInactive & search nama, urut nama), findById, insert, update, setActive;
+pemetaan baris snake_case SQLite ke tipe domain camelCase.
+
+IMPLEMENTATION:
+src/data/repositories/productVariantRepository.ts. Nonaktif dilakukan melalui kolom is_active,
+tanpa pernah menghapus baris (D-13, BR-DI-004).
+
+FILES CHANGED:
+- src/data/repositories/productVariantRepository.ts
+
+TEST:
+Belum ada integration test repository produk (lihat BL-002-07). Constraint skema (harga negatif ditolak)
+diuji secara tidak langsung oleh src/data/db/migrations.test.ts.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-PR-001/AC-PR-003.
+
+EVIDENCE:
+Kode repository; output `npx jest` 2026-09-22.
+
+ISSUES:
+Pencarian memakai LIKE tanpa index khusus; belum menjadi masalah untuk skala MVP.
+
+DECISIONS:
+Repository menjadi satu-satunya tempat SQL untuk product_variants.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

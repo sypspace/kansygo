@@ -1,0 +1,40 @@
+TASK ID: BL-002-06
+TITLE: Layar detail/edit/deaktivasi produk
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-002 — Product Variant (master data)
+REQUIREMENTS: FR-PR-003, FR-PR-004, FR-PR-007; BR-PR-005, BR-PR-006; D-13
+ACCEPTANCE CRITERIA: AC-PR-003 (deaktivasi), AC-DI-005 (histori tetap)
+
+SCOPE:
+Layar detail produk: ringkasan (nama, harga, status, timestamp), form edit in-place, penyimpanan perubahan,
+serta aksi aktifkan/nonaktifkan dengan konfirmasi dan peringatan informatif (tidak memblokir).
+
+IMPLEMENTATION:
+src/app/products/[id].tsx memuat produk berdasarkan parameter rute, mengisi form melalui replaceValues,
+lalu memanggil products.update / products.setActive. Konfirmasi memakai Alert dengan gaya destructive.
+
+FILES CHANGED:
+- src/app/products/[id].tsx
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-PR-003.
+
+EVIDENCE:
+Kode layar; rute products/[id] terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Terdapat lint error react-hooks/set-state-in-effect pada layar ini (pemanggilan load di dalam useEffect),
+dicatat pada BL-001-11. Peringatan deaktivasi masih kosong sampai inventory tersedia.
+
+DECISIONS:
+Nonaktif tidak menghapus produk; histori tetap memakai ID lama (BR-PR-005, BR-DI-004).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

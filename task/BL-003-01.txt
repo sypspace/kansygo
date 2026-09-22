@@ -1,0 +1,39 @@
+TASK ID: BL-003-01
+TITLE: Repository Agent
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-003 — Agent (master data)
+REQUIREMENTS: FR-AG-001, FR-AG-003, FR-AG-004, FR-AG-005; BR-AG-001 s.d. BR-AG-003; `05-Data-Model.md` §7
+ACCEPTANCE CRITERIA: AC-AG-001, AC-AG-002
+
+SCOPE:
+list (includeInactive, search nama/kontak), findById, insert, update, setActive;
+pemetaan baris snake_case ke tipe domain camelCase.
+
+IMPLEMENTATION:
+src/data/repositories/agentRepository.ts. Agent nonaktif tidak dihapus, hanya ditandai is_active = 0 (D-13).
+
+FILES CHANGED:
+- src/data/repositories/agentRepository.ts
+
+TEST:
+Belum ada integration test repository agent (lihat BL-003-07). Tabel dan constraint diuji lewat
+src/data/db/migrations.test.ts (daftar tabel).
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode repository; output `npx jest` 2026-09-22.
+
+ISSUES:
+Belum ada test untuk perilaku pencarian dan filter is_active.
+
+DECISIONS:
+Repository menjadi satu-satunya tempat SQL untuk agents.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

@@ -1,0 +1,47 @@
+TASK ID: BL-005-09
+TITLE: Nomor batch BATCH-YYYYMMDD-NNN (D-08)
+STATUS: IN_PROGRESS
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: D-08 (nomor dokumen `BATCH-YYYYMMDD-NNN` dihasilkan di dalam transaksi database);
+FR-PD-001 (identitas batch unik)
+ACCEPTANCE CRITERIA: AC-PD-001
+
+SCOPE:
+Pembentukan nomor batch human-readable dengan urutan harian berdasarkan tanggal produksi, dihasilkan
+saat batch dibuat, dan stabil setelahnya (tidak berubah bila tanggal produksi diubah).
+
+IMPLEMENTATION:
+generateBatchNumber(productionDate, sequence) di src/data/db/schema/v2.ts menghasilkan
+`BT-YYYYMMDD-NNN`; urutan dihitung dengan countByProductionDate(...) + 1 pada ProductionService.createBatch.
+
+FILES CHANGED:
+- src/data/db/schema/v2.ts (generateBatchNumber)
+- src/domain/types.ts (tipe BatchNumber, komentar aturan)
+- src/application/production/productionService.ts (pemakaian pada createBatch)
+
+TEST:
+Belum ada test untuk generateBatchNumber maupun untuk penomoran berurutan.
+
+PREVIEW:
+TIDAK AKTIF — layar produksi belum ada.
+
+VERIFICATION:
+UNKNOWN — dan tidak dapat diverifikasi sebelum konflik prefix diputuskan.
+
+EVIDENCE:
+src/data/db/schema/v2.ts baris 82-86; output `npx tsc --noEmit` 2026-09-22.
+
+ISSUES:
+**Konflik requirement (blokir):** implementasi memakai prefix `BT-`, sedangkan `09-Decision-Log.md` D-08
+menetapkan `BATCH-YYYYMMDD-NNN`. Requirement dan keputusan yang disetujui tidak boleh diubah secara diam-diam
+(`AGENTS.md` §2, §14), sehingga task ini tidak boleh diselesaikan dengan memilih salah satu sepihak.
+Perilaku urutan juga belum memakai transaksi database seperti yang disyaratkan D-08, sehingga dua batch
+pada tanggal sama berpotensi memperoleh nomor yang sama bila dibuat bersamaan (MVP single-user menekan risiko,
+namun tetap tidak sesuai keputusan).
+
+DECISIONS:
+Tidak ada keputusan baru. Penyelesaian menunggu BL-017-01.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

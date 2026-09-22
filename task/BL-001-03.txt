@@ -1,0 +1,48 @@
+TASK ID: BL-001-03
+TITLE: Struktur layer & arah dependensi
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `08-Technical-Architecture.md` §2, §3; `AGENTS.md` §15
+ACCEPTANCE CRITERIA: AC-FU-002 (business logic tidak bergantung pada SQLite)
+
+SCOPE:
+Struktur folder: src/app (route), src/ui (komponen, tema, hook, provider), src/application (use case + port),
+src/domain (aturan & validasi murni), src/data (schema, migrasi, repository), src/platform (clock, id).
+
+IMPLEMENTATION:
+Alias @/ → src/. Layar hanya memanggil use case dari context AppProvider;
+repository menjadi satu-satunya pemilik statement SQL.
+
+FILES CHANGED:
+- src/app/**
+- src/ui/**
+- src/application/**
+- src/domain/**
+- src/data/**
+- src/platform/**
+- tsconfig.json (paths @/*)
+
+TEST:
+Tidak ada test otomatis untuk struktur; diaudit manual pada reconciliation.
+
+PREVIEW:
+TIDAK BERLAKU.
+
+VERIFICATION:
+Audit 2026-09-22: tidak ada statement SQL di luar src/data/** dan tidak ada impor React/react-native
+di src/domain, src/application, maupun src/data.
+
+EVIDENCE:
+- `grep -rnE '(SELECT |INSERT INTO|UPDATE |DELETE FROM)' src` → tidak ada hasil di luar src/data
+- `grep -rn 'expo-sqlite' src`
+- task/BL-015-01.txt
+
+ISSUES:
+Pembukaan database berada di src/ui/providers/AppProvider.tsx (composition root).
+
+DECISIONS:
+Dinilai NO_ACTION karena masih dalam batas composition root (`BACKLOG.md` BL-015).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

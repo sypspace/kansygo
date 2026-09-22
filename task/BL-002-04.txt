@@ -1,0 +1,40 @@
+TASK ID: BL-002-04
+TITLE: Layar daftar produk + pencarian/filter
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-002 — Product Variant (master data)
+REQUIREMENTS: FR-PR-001, FR-PR-007; FR-SR-002 (parsial); `04-UX-Flows.md` §28 (UX-FLOW-PR-001)
+ACCEPTANCE CRITERIA: AC-PR-001 (daftar produk), AC-SR-002 (parsial)
+
+SCOPE:
+Layar daftar produk: pencarian nama, filter "Aktif"/"Semua", indikator status aktif, harga dan batas low stock,
+empty state, penanganan error dengan tombol coba lagi, serta tombol menuju form produk baru.
+
+IMPLEMENTATION:
+src/app/products/index.tsx memuat ulang data dengan useFocusEffect saat layar aktif;
+pencarian dan filter diteruskan sebagai parameter ke use case ProductService.
+
+FILES CHANGED:
+- src/app/products/index.tsx
+- src/ui/components/ListRow.tsx, EmptyState.tsx, StatusPill.tsx, TextField.tsx (pemakaian)
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-PR-001/AC-SR-002.
+
+EVIDENCE:
+Kode layar; rute products/index terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Pencarian hanya mencakup data master produk, belum mencakup histori transaksi (bagian BL-013-02).
+
+DECISIONS:
+Filter default "Aktif" agar transaksi baru hanya memakai produk aktif (BR-PR-006).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

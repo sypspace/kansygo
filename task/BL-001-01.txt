@@ -1,0 +1,45 @@
+TASK ID: BL-001-01
+TITLE: Bootstrap proyek Expo SDK 57 + TypeScript strict
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `00-Baseline.md` §3, §5; `08-Technical-Architecture.md` §2
+ACCEPTANCE CRITERIA: AC-APP-001 (prasyarat)
+
+SCOPE:
+Inisialisasi proyek Expo + expo-router, TypeScript strict, skrip start/android/lint/typecheck/test,
+konfigurasi app.json untuk Android (package com.kansygo.app; plugin expo-router, expo-sqlite, expo-sharing).
+
+IMPLEMENTATION:
+Commit 9f832d5 "chore: bootstrap KansyGo Expo + TypeScript foundation".
+Stack: expo ~57.0.24, react-native 0.86.3, react 19.2.3, typescript ~6.0.3, expo-router ~57.0.22.
+
+FILES CHANGED:
+- package.json
+- app.json
+- tsconfig.json
+- eslint.config.js
+- .npmrc
+- .gitignore
+- assets/ (icon, splash, adaptive icon)
+
+TEST:
+Tidak ada test otomatis khusus bootstrap; ketersediaan skrip verifikasi diuji pada BL-001-02.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti Expo preview yang tersimpan di repository.
+
+VERIFICATION:
+UNKNOWN — AC-APP-001 belum diverifikasi formal.
+
+EVIDENCE:
+git commit 9f832d5; package.json; app.json; tsconfig.json.
+
+ISSUES:
+Tidak ada berkas bukti preview/screenshot di repository.
+
+DECISIONS:
+Expo SDK 57 sesuai `00-Baseline.md` §39; newArchEnabled: true; typedRoutes: false.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

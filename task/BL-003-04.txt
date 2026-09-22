@@ -1,0 +1,38 @@
+TASK ID: BL-003-04
+TITLE: Layar daftar agent + pencarian/filter
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-003 — Agent (master data)
+REQUIREMENTS: FR-AG-001, FR-AG-005; FR-SR-001 (parsial); `04-UX-Flows.md` §29 (UX-FLOW-AG-001)
+ACCEPTANCE CRITERIA: AC-AG-001, AC-SR-001 (parsial)
+
+SCOPE:
+Layar daftar agent: pencarian nama/kontak, filter "Aktif"/"Semua", fee per unit dan kontak pada baris daftar,
+indikator status, empty state, penanganan error, serta tombol menuju form agent baru.
+
+IMPLEMENTATION:
+src/app/agents/index.tsx memuat ulang data dengan useFocusEffect; pencarian dan filter diteruskan ke AgentService.
+
+FILES CHANGED:
+- src/app/agents/index.tsx
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-AG-001/AC-SR-001.
+
+EVIDENCE:
+Kode layar; rute agents/index terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Pencarian terbatas pada data master agent; histori transaksi agent belum dicakup (BL-013-02).
+
+DECISIONS:
+Filter default "Aktif" agar delivery baru hanya memakai agent aktif (BR-AG-003).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

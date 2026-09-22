@@ -2,98 +2,81 @@
 
 ## 1. Purpose
 
-This repository contains an Android-first internal application for managing a frozen-food consignment and distribution business.
+This file defines the universal working rules for AI coding agents working on this project.
 
-This file defines the universal working rules for AI coding agents working on this repository, including but not limited to:
+These rules are tool-independent and apply whether the agent is GitHub Copilot, Cline, or another coding agent.
 
-- GitHub Copilot
-- Cline
-- Claude Code
-- Cursor
-- Other AI coding agents
+The agent must follow this file together with the project's approved requirement documents.
 
-This file is tool-independent.
-
-The agent MUST treat the approved project documentation as the primary source of truth for product behavior and business rules.
-
-The agent MUST NOT silently change confirmed requirements, business rules, data relationships, or approved user flows.
+The agent must not treat requirements as an immediate coding instruction. The agent must work through the project's backlog and task workflow.
 
 ---
 
-## 2. Source of Truth
+## 2. Project Source of Truth
 
-Before implementing or modifying a feature, the agent MUST read the relevant project documentation.
+The following documents define the approved product requirements:
 
-The current source-of-truth documents are:
+1. `01-PRD.md`
+2. `02-Business-Rules.md`
+3. `03-Functional-Requirements.md`
+4. `04-UX-Flows.md`
+5. `05-Data-Model.md`
+6. `06-Acceptance-Criteria.md`
 
-1. `00-Baseline.md`
-2. `01-PRD.md`
-3. `02-Business-Rules.md`
-4. `03-Functional-Requirements.md`
-5. `04-UX-Flows.md`
-6. `05-Data-Model.md`
-7. `06-Acceptance-Criteria.md`
-8. `08-Technical-Architecture.md`
-9. `09-Decision-Log.md`
+These documents are the source of truth for product behavior and requirements.
 
-All documents are located in the `docs/` directory.
+### Priority
 
-`09-Decision-Log.md` mencatat keputusan final atas item yang sebelumnya `OPEN`,
-`PROPOSED`, atau saling bertentangan antar dokumen. Bila terjadi konflik antar
-dokumen, keputusan pada `09-Decision-Log.md` yang berlaku sampai dokumen terkait
-diperbarui.
+When interpreting requirements, use this order:
 
-The documents describe different levels of the system:
+1. `01-PRD.md`
+2. `02-Business-Rules.md`
+3. `03-Functional-Requirements.md`
+4. `04-UX-Flows.md`
+5. `05-Data-Model.md`
+6. `06-Acceptance-Criteria.md`
+7. `BACKLOG.md`
+8. `TASK.md`
+9. Individual task logs in `/task/`
 
-```text
-01-PRD
-    ↓
-02-Business-Rules
-    ↓
-03-Functional-Requirements
-    ↓
-04-UX-Flows
-    ↓
-05-Data-Model
-    ↓
-06-Acceptance-Criteria
-```
+`BACKLOG.md`, `TASK.md`, and task logs organize implementation work. They must not silently override approved requirements.
 
-Use the document most relevant to the task, but read additional documents when the task crosses multiple areas.
-
-If documents appear to conflict:
-
-1. Identify the conflict.
-2. Do not silently choose an interpretation.
-3. Report the conflict.
-4. Ask for clarification before implementing the affected behavior.
-
-The agent may propose a solution, but changes to confirmed requirements require user approval.
+If an implementation task appears to conflict with an approved requirement, stop and report the conflict instead of silently changing the requirement.
 
 ---
 
 # 3. Product Context
 
-The application is an internal operational tool for a frozen-food consignment and distribution business.
+This project is an internal Android application for a small frozen-food consignment/distribution business.
 
-The core lifecycle is:
+The MVP is designed around:
+
+- Android
+- React Native
+- Expo
+- TypeScript
+- local SQLite database
+- local-first / offline-first operation
+- single business
+- single device
+- single operational user
+- no mandatory cloud backend
+- optional Google Drive database backup
+
+The application supports the operational lifecycle:
 
 ```text
 Production
     ↓
-Owner Stock
+Inventory
     ↓
 Delivery Planning
     ↓
 Delivery Confirmation
     ↓
-Agent Stock
-    ↓
 Sales Confirmation
     ↓
-HABIS / TIDAK_HABIS
-    ↓
-Reconciliation (if TIDAK_HABIS)
+Reconciliation / Return
     ↓
 Settlement
     ↓
@@ -102,535 +85,731 @@ Invoice
 Payment
 ```
 
-The application is designed around the operational question:
+The MVP should remain simple and operationally focused.
 
-> "Hari ini saya harus mengunjungi siapa dan melakukan apa?"
-
-The MVP prioritizes:
-
-- correctness,
-- operational simplicity,
-- traceability,
-- financial safety,
-- offline operation,
-- low implementation complexity.
+Do not introduce complexity merely because a future version may need it.
 
 ---
 
-# 4. MVP Constraints
+# 4. Core Engineering Principle
 
-The MVP is:
+> Build simple for today, but do not design yourself into a dead end for tomorrow.
 
-- Android-first.
-- Built with React Native and Expo.
-- Written in TypeScript.
-- Single business.
-- Single device.
-- Single operational user/admin.
-- Local-first.
-- Offline-first.
-- No required cloud backend.
-- No required internet connection for core operations.
-- Agent does not use the application.
-- No agent self-service application.
-- No multi-user role/permission system.
-- No multi-device synchronization.
-- No Laravel/PostgreSQL backend in the MVP.
-- No web/admin application in the MVP.
+The agent must:
 
-Google Drive may be used for optional database backup.
+- keep the MVP simple;
+- avoid unnecessary infrastructure;
+- preserve clear separation of concerns;
+- preserve historical transaction integrity;
+- keep business rules independent from UI;
+- keep persistence behind repositories or equivalent boundaries;
+- avoid premature cloud/synchronization architecture;
+- prepare stable foundations for future API/cloud evolution.
 
-Backup is NOT synchronization.
-
-The agent MUST NOT introduce cloud infrastructure, authentication infrastructure, synchronization mechanisms, or multi-user architecture merely because they may be needed in the future.
+Future-readiness does not mean implementing future functionality now.
 
 ---
 
-# 5. Technology Stack
+# 5. Requirements → Backlog → Tasks
 
-The current MVP stack is:
+Requirements must not be implemented directly without passing through the project's work-management layer.
 
-```text
-React Native
-Expo
-TypeScript
-SQLite / Local Database
-```
-
-The exact supporting libraries may be selected during implementation.
-
-Do not add supporting libraries merely because they are commonly used in React Native projects.
-
-When choosing a library, consider:
-
-- maintenance status,
-- Expo compatibility,
-- Android compatibility,
-- offline behavior,
-- bundle/application complexity,
-- API stability,
-- whether the platform or Expo already provides the required capability.
-
-Prefer the simplest stable solution.
-
----
-
-# 6. Architectural Direction
-
-The conceptual architecture is:
+The standard flow is:
 
 ```text
-┌─────────────────────────────┐
-│       React Native UI       │
-│           Expo              │
-├─────────────────────────────┤
-│     Application / Use Cases │
-├─────────────────────────────┤
-│      Domain / Business      │
-│           Rules             │
-├─────────────────────────────┤
-│        Repository           │
-├─────────────────────────────┤
-│       Local Data Source     │
-├─────────────────────────────┤
-│           SQLite            │
-└─────────────────────────────┘
-```
-
-Future architecture may evolve toward:
-
-```text
-Android
+Requirements
     ↓
-Repository / Sync Layer
+Backlog Item
     ↓
-Laravel API
+Tasks
     ↓
-PostgreSQL
-
-Web/Admin
+Implementation
     ↓
-Filament
+Testing
     ↓
-Laravel
+Expo Preview
+    ↓
+Verification
+    ↓
+Task Done
+    ↓
+Backlog Update
 ```
 
-The MVP should prepare for this direction without implementing it prematurely.
+The agent must use this workflow for substantive implementation work.
 
----
+## 5.1 Backlog
 
-# 7. Separation of Concerns
+`BACKLOG.md` is the bridge between approved requirements and implementation work.
 
-Keep the following concerns reasonably separated:
-
-```text
-UI
- ↓
-Application / Use Cases
- ↓
-Domain / Business Rules
- ↓
-Repository
- ↓
-Local Database
-```
-
-### UI
-
-Responsible for:
-
-- displaying information,
-- collecting user input,
-- navigation,
-- UI state,
-- presenting validation/errors.
-
-UI should NOT contain core business calculations.
-
-### Application / Use Cases
-
-Responsible for:
-
-- coordinating business operations,
-- invoking repositories,
-- validating workflows,
-- managing transaction boundaries where appropriate.
-
-### Domain / Business Rules
-
-Responsible for:
-
-- business calculations,
-- invariants,
-- financial calculations,
-- inventory rules,
-- sales/reconciliation rules.
-
-Business logic should be testable without rendering React Native components.
-
-### Repository
-
-Responsible for:
-
-- persistence access,
-- querying,
-- storing domain/application data,
-- hiding database implementation details.
-
-### Database
-
-Responsible for:
-
-- persistent local storage,
-- relationships,
-- constraints,
-- transactions,
-- indexes appropriate to actual queries.
-
----
-
-# 8. React and React Native Principles
-
-Use normal React principles.
-
-Prefer:
-
-- functional components,
-- hooks,
-- composition,
-- explicit data flow,
-- predictable state management.
-
-Avoid:
-
-- unnecessary class components,
-- excessive prop drilling when a simpler solution exists,
-- global state for data that belongs locally to one screen,
-- components containing large amounts of business logic.
-
-Keep components focused.
-
-A screen should coordinate UI behavior rather than become the location of all application logic.
-
----
-
-# 9. Component Design
-
-Prefer small, reusable components when reuse is meaningful.
-
-Do not create a component abstraction merely because two pieces of JSX look slightly similar.
-
-A component should have a clear responsibility.
-
-Examples of reasonable boundaries:
-
-```text
-Screen
- ├── Header
- ├── Summary
- ├── List
- │    └── List Item
- └── Primary Action
-```
-
-Avoid deeply nested abstraction layers unless they solve a real problem.
-
----
-
-# 10. TypeScript Rules
-
-TypeScript is required.
-
-Prefer explicit domain types for important business concepts.
-
-For example:
-
-```ts
-type SalesResult = "HABIS" | "TIDAK_HABIS";
-```
-
-and:
-
-```ts
-type StockMovementType =
-  | "PRODUCTION"
-  | "DELIVERY"
-  | "RETURN"
-  | "SOLD"
-  | "WASTE"
-  | "ADJUSTMENT";
-```
-
-Use types to protect business invariants where practical.
-
-Avoid:
-
-```ts
-any;
-```
-
-unless there is a documented reason.
-
-Prefer:
-
-- interfaces/types for domain structures,
-- discriminated unions for finite states,
-- explicit function input/output types where useful,
-- nullable types where null is a meaningful state.
-
-Do not use TypeScript complexity for its own sake.
-
----
-
-# 11. Domain Types and Statuses
-
-Important business states must be represented explicitly.
-
-Do not invent alternative names for approved domain states.
-
-For example, use:
-
-```text
-HABIS
-TIDAK_HABIS
-```
-
-rather than introducing unrelated equivalents such as:
-
-```text
-SOLD_OUT
-NOT_SOLD_OUT
-UNSOLD
-RETURNED
-```
-
-unless the documentation explicitly defines them as separate concepts.
-
-Centralize important domain constants/types rather than duplicating string literals throughout the application.
-
----
-
-# 12. State Management
-
-Use the simplest state management approach appropriate to the feature.
-
-Not all state needs global management.
-
-Distinguish between:
-
-### UI State
+A backlog item represents a meaningful functional or technical outcome.
 
 Examples:
 
-- modal open/closed,
-- selected tab,
-- temporary form input,
-- loading state.
-
-### Application State
-
-Examples:
-
-- current operational flow,
-- pending confirmation,
-- selected delivery.
-
-### Persistent Business Data
-
-Examples:
-
-- agents,
-- products,
-- deliveries,
-- settlements,
-- payments,
-- stock movements.
-
-Persistent business data belongs in the repository/database layer, not merely in React state.
-
-Do not introduce a global state library unless the actual application needs it.
-
----
-
-# 13. Navigation
-
-Navigation should follow `04-UX-Flows.md`.
-
-Do not introduce navigation paths that bypass required business steps.
-
-For example:
-
 ```text
-TIDAK_HABIS
-    ↓
-Reconciliation
-    ↓
-Settlement
+BL-001 — Product & Variant Management
+BL-002 — Agent Management
+BL-003 — Production
+BL-004 — Inventory
+BL-005 — Delivery
 ```
 
-must not be bypassed merely because it is convenient to navigate directly to settlement.
+A backlog item should reference the relevant requirements and acceptance criteria.
 
-Navigation should represent the approved operational flow.
+The agent must not create implementation tasks that have no identifiable purpose or requirement relationship, except for clearly justified technical/infrastructure work.
 
 ---
 
-# 14. Forms and Validation
+# 6. Task Registry
 
-Forms should provide clear and immediate feedback where appropriate.
+`TASK.md` is the central task registry and status index for the project.
 
-Validate:
+It contains the complete list of defined tasks and their current statuses.
 
-- required fields,
-- quantity,
-- monetary values,
-- active master data,
-- business relationships,
-- domain invariants.
+Every task defined in `TASK.md` must have a corresponding file in `task/`:
 
-However, UI validation is not sufficient.
+```text
+task/[task-id].txt
+```
 
-Critical business validation must also exist outside the UI.
+The task file is the detailed record for an individual task. It is created **when the task is defined**, not only after implementation begins.
+
+A task file may exist while the task is still `TODO`. For example:
+
+```text
+STATUS: TODO
+IMPLEMENTATION: Not started
+TEST: Not started
+PREVIEW: Not started
+VERIFICATION: Not started
+```
+
+The task file persists throughout the entire task lifecycle and records both:
+
+- the task definition; and
+- the execution and evidence history.
+
+The task file should record, where applicable:
+
+```text
+TASK ID:
+TITLE:
+STATUS:
+
+BACKLOG:
+REQUIREMENTS:
+ACCEPTANCE CRITERIA:
+
+OBJECTIVE:
+SCOPE:
+DEPENDENCIES:
+
+IMPLEMENTATION:
+FILES CHANGED:
+
+TEST:
+TEST RESULT:
+
+PREVIEW:
+PREVIEW RESULT:
+
+VERIFICATION:
+VERIFICATION RESULT:
+
+EVIDENCE:
+ISSUES:
+DECISIONS:
+NOTES:
+```
+
+The exact format may evolve, but the task file must allow another developer or agent to understand what the task is and what happened during its lifecycle.
+
+`TASK.md` and `task/` must remain consistent.
+
+- Every task registered in `TASK.md` must have a corresponding `task/[task-id].txt`.
+- Every valid task file must be registered in `TASK.md`.
+- Missing task files must be created.
+- A valid task file that is missing from `TASK.md` must be reconciled into `TASK.md`.
+- Task IDs must be unique and must not be reused for a different task.
+- The status recorded in a task file and in `TASK.md` must agree.
+
+Historical evidence must not be fabricated. If historical information cannot be established from repository artifacts or available evidence, record it as:
+
+```text
+UNKNOWN
+```
+
+Do not claim implementation, testing, preview, or verification that cannot be supported by evidence.
+
+---
+
+# 7. Task IDs
+
+Every task must have a unique and stable task ID.
+
+Recommended format:
+
+```text
+BL-[BACKLOG NUMBER]-[TASK NUMBER]
+```
+
+Examples:
+
+```text
+BL-001-01
+BL-001-02
+BL-002-01
+```
+
+The task ID must be used consistently in:
+
+- `TASK.md`
+- `/task/[task-id].txt`
+- commit messages when practical
+- relevant implementation notes
+- test/evidence references when practical
+
+Do not reuse a task ID for a different task.
+
+---
+
+# 8. Task Scope
+
+Each task should be:
+
+- small;
+- specific;
+- understandable;
+- independently verifiable where practical;
+- limited to one coherent objective.
+
+Avoid creating tasks that combine unrelated work.
+
+Bad:
+
+```text
+Implement the entire inventory system.
+```
+
+Better:
+
+```text
+BL-004-01 — Create inventory stock movement model
+BL-004-02 — Implement production stock movement
+BL-004-03 — Implement delivery stock movement
+BL-004-04 — Implement return stock movement
+BL-004-05 — Display owner stock balance
+```
+
+If a task becomes too large or changes into multiple unrelated objectives, split it into additional tasks.
+
+---
+
+# 9. Task Files and Evidence
+
+The `/task/` directory contains the task files for individual tasks.
+
+Each defined task must have a corresponding task file:
+
+```text
+/task/[task-id].txt
+```
+
+The task file is created **when the task is defined**, not after implementation begins.
+
+It records both the **task definition** and its **execution/lifecycle record**, and it persists throughout the entire task lifecycle (`TODO` → `DONE`).
+
+A task file may therefore exist while the task is still `TODO`, for example:
+
+```text
+STATUS: TODO
+IMPLEMENTATION: Not started
+TEST: Not started
+PREVIEW: Not started
+VERIFICATION: Not started
+```
 
 Example:
 
 ```text
-UI validation
-     +
-Application/domain validation
-     +
-Database constraints where appropriate
+/task/BL-001-03.txt
 ```
 
-This prevents future interfaces or code paths from bypassing critical rules.
-
----
-
-# 15. Local Database
-
-The local database is the primary operational data store for the MVP.
-
-Core application behavior MUST NOT depend on a network connection.
-
-Use SQLite or the selected Expo-compatible local database implementation.
-
-Database access must be isolated behind the repository/data-access boundary.
-
-Do not scatter raw SQL/database calls throughout React components.
-
----
-
-# 16. Database Schema
-
-The database should follow `05-Data-Model.md`.
-
-The primary conceptual entities include:
+The task file should record relevant information such as:
 
 ```text
-Business
-User
-Product Variant
-Agent
+TASK ID:
+TITLE:
+STATUS:
 
-Production Batch
-Production Item
+BACKLOG:
+REQUIREMENTS:
+ACCEPTANCE CRITERIA:
 
-Delivery Plan
-Delivery Plan Item
-Delivery
-Delivery Item
+OBJECTIVE:
+SCOPE:
+DEPENDENCIES:
 
-Sales Confirmation
-Reconciliation
-Reconciliation Item
+IMPLEMENTATION:
 
-Settlement
-Settlement Item
-Invoice
-Invoice Item
-Payment
+FILES CHANGED:
 
-Stock Movement
-Operational Task
+TEST:
+TEST RESULT:
+
+PREVIEW:
+PREVIEW RESULT:
+
+VERIFICATION:
+VERIFICATION RESULT:
+
+EVIDENCE:
+
+ISSUES:
+
+DECISIONS:
+
+NOTES:
 ```
 
-Do not add entities simply because a framework or library convention suggests them.
+The exact format may evolve as the project develops, but the task file should allow another developer or agent to understand what happened during the task.
 
-Do not remove entities required by the approved data model without approval.
+The `STATUS` recorded in the task file must match the status of the same task in `TASK.md`.
+
+Testing, preview, and verification are lifecycle stages of a task, not separate tasks. Their outcome is recorded inside the task file (`TEST`, `PREVIEW`, `VERIFICATION`) and in the task status, unless the activity is genuinely large or independently meaningful work.
+
+## 9.1 Evidence
+
+Evidence may include:
+
+- test results;
+- Expo preview result;
+- screenshots;
+- screen recordings;
+- relevant command output;
+- validation results;
+- notes about manual verification;
+- references to changed files.
+
+Do not create unnecessary evidence files.
+
+If a task can be adequately documented in its `.txt` log, no additional evidence file is required.
+
+If screenshots or other artifacts are useful, they may be stored under an appropriate task-related location.
+
+## 9.2 Task File Consistency
+
+The three artifacts must remain consistent:
+
+```text
+BACKLOG.md   → backlog items / outcomes
+TASK.md      → central index and status registry of all defined tasks
+task/        → definition and lifecycle record of each individual task
+```
+
+Rules:
+
+- Every task registered in `TASK.md` must have a corresponding `/task/[task-id].txt`.
+- Every valid task file must be registered in `TASK.md`.
+- Missing task files must be created.
+- A valid task file that is missing from `TASK.md` must be reconciled into `TASK.md`.
+- Task IDs must be unique and must not be reused for a different task.
+- The `STATUS` in a task file and in `TASK.md` must agree.
+- Task definitions are not created by working backwards from code: a task file is created when the task is defined, even if no work has started.
+
+Historical evidence must never be fabricated.
+
+If historical information cannot be established from repository artifacts, record:
+
+```text
+UNKNOWN
+```
+
+Do not claim implementation, testing, preview, or verification that cannot be supported by evidence.
 
 ---
 
-# 17. Database Migrations
+# 10. Task Lifecycle
 
-Database schema changes require deliberate migration handling.
+The standard task lifecycle is:
 
-Before changing the schema:
+```text
+TODO
+  ↓
+IN_PROGRESS
+  ↓
+IMPLEMENTED
+  ↓
+TESTED
+  ↓
+PREVIEWED
+  ↓
+VERIFIED
+  ↓
+DONE
+```
 
-1. Read `05-Data-Model.md`.
-2. Identify affected entities.
-3. Identify affected historical data.
-4. Determine migration requirements.
-5. Check acceptance criteria.
-6. Preserve existing valid data.
+The statuses describe actual work completed.
 
-Never use destructive database recreation as a normal upgrade strategy.
+A task file exists from the moment the task is defined; the statuses above describe progress, not whether a task file exists.
 
-Do not silently drop tables or historical data.
+Do not mark a task `DONE` merely because:
+
+- code has been written;
+- TypeScript compiles;
+- the application builds;
+- unit tests pass.
+
+A task is `DONE` only when its implementation, testing, preview, and verification requirements have been satisfied.
 
 ---
 
-# 18. Database Transactions
+# 11. Standard Task Workflow
 
-Business operations should be atomic.
+For every implementation task, the agent should follow this sequence.
 
-For example:
+## Step 0 — DEFINE AND REGISTER
 
-### Production
+Create `/task/[task-id].txt` when the task is defined, then register the task in `TASK.md`.
+
+No task should be implemented before it exists in both places.
+
+## Step 1 — READ
+
+Read:
+
+- `AGENTS.md`
+- relevant requirement documents
+- `BACKLOG.md`
+- `TASK.md`
+- relevant task file (`/task/[task-id].txt`) if one exists
+- relevant source code
+
+Do not start coding before understanding the task context.
+
+## Step 2 — UNDERSTAND
+
+Identify:
+
+- objective;
+- requirements;
+- business rules;
+- acceptance criteria;
+- affected UX flow;
+- affected data model;
+- dependencies;
+- existing implementation.
+
+If the task is ambiguous, investigate the existing requirements before making assumptions.
+
+## Step 3 — PLAN
+
+Determine:
+
+- files that will change;
+- implementation approach;
+- tests required;
+- preview/verification approach;
+- whether documentation needs updating.
+
+Keep the plan proportional to the task.
+
+Do not create unnecessary architecture.
+
+## Step 4 — IMPLEMENT
+
+Implement only the task scope.
+
+Do not silently add unrelated features.
+
+Follow existing project conventions.
+
+## Step 5 — TEST
+
+Run appropriate tests.
+
+Depending on the task, this may include:
+
+- unit tests;
+- integration tests;
+- database tests;
+- validation tests;
+- component tests;
+- functional tests;
+- TypeScript checks;
+- linting;
+- other project-defined checks.
+
+Testing requirements must be proportional to the affected behavior.
+
+## Step 6 — RUN EXPO PREVIEW
+
+After implementation and testing, run the application through an Expo preview whenever practical.
+
+For UI-affecting tasks, Expo preview is mandatory.
+
+For non-UI tasks that affect application behavior, preview the integrated application whenever practical.
+
+The purpose is to verify the actual application behavior, not merely source-code correctness.
+
+A successful build or passing test suite is not a substitute for application preview.
+
+## Step 7 — VERIFY
+
+Verify the task against:
+
+- its stated scope;
+- relevant requirements;
+- relevant acceptance criteria;
+- actual application behavior;
+- relevant UX flow.
+
+For UI work, verify the actual rendered result.
+
+For operational behavior, verify the relevant user flow rather than only isolated functions.
+
+## Step 8 — UPDATE TASK LOG
+
+Update the task file created when the task was defined:
+
+```text
+/task/[task-id].txt
+```
+
+Record:
+
+- implementation summary;
+- tests;
+- preview;
+- verification;
+- files changed;
+- evidence;
+- issues or limitations.
+
+## Step 9 — UPDATE TASK REGISTRY
+
+Update `TASK.md`.
+
+Only move the task to `DONE` after the required workflow has been completed.
+
+## Step 10 — UPDATE BACKLOG
+
+When all tasks belonging to a backlog item are complete and its acceptance criteria are satisfied, update `BACKLOG.md`.
+
+A backlog item must not be marked complete merely because some of its tasks are complete.
+
+---
+
+# 12. Preview Is a Quality Gate
+
+Application preview is part of the definition of done.
+
+For UI-affecting work:
+
+```text
+Implementation
+    ↓
+Test
+    ↓
+Expo Preview
+    ↓
+Visual / Functional Verification
+    ↓
+DONE
+```
+
+The agent must not consider a UI task complete based only on:
+
+```text
+Code compiles
++
+Tests pass
+```
+
+If Expo preview cannot be run, the agent must:
+
+1. record the reason;
+2. record what was successfully tested;
+3. record what remains unverified;
+4. leave the task in an appropriate non-DONE status.
+
+Do not falsely mark an unverified task as `DONE`.
+
+---
+
+# 13. Requirements Traceability
+
+Implementation should maintain traceability:
+
+```text
+Requirement
+    ↓
+Backlog Item
+    ↓
+Task
+    ↓
+Code
+    ↓
+Test
+    ↓
+Preview
+    ↓
+Verification
+```
+
+Where practical, task logs should identify the relevant:
+
+- PRD section;
+- business rule;
+- functional requirement;
+- UX flow;
+- data model requirement;
+- acceptance criterion.
+
+This allows future developers and AI agents to understand why a piece of code exists.
+
+---
+
+# 14. Handling Requirement Changes
+
+Confirmed requirements must not be silently changed during implementation.
+
+If implementation reveals:
+
+- contradictory requirements;
+- missing rules;
+- ambiguous behavior;
+- an incorrect assumption;
+- an impossible acceptance criterion;
+
+the agent must stop at the relevant decision point and report the issue.
+
+Do not "fix" the requirements silently in code.
+
+If a requirement change is approved, update the appropriate source-of-truth document before or together with the implementation change.
+
+Backlog and task records must then be synchronized with the updated requirement.
+
+---
+
+# 15. Architecture
+
+Use the following conceptual separation:
+
+```text
+React Native UI
+      ↓
+Application / Use Cases
+      ↓
+Domain / Business Rules
+      ↓
+Repository
+      ↓
+SQLite / Local Database
+```
+
+The UI must not contain core business rules when those rules can be placed in the domain/application layer.
+
+The application must not depend directly on Android UI components for business logic.
+
+Persistence details should remain behind a repository or equivalent abstraction.
+
+---
+
+# 16. React Native / Expo
+
+The MVP uses:
+
+- React Native
+- Expo
+- TypeScript
+
+Follow standard React principles.
+
+Prefer:
+
+- small components;
+- predictable state;
+- explicit data flow;
+- reusable UI components;
+- clear separation between UI and business logic.
+
+Do not introduce a state-management library or other major framework dependency unless there is a demonstrated need.
+
+Do not add libraries merely because they are popular.
+
+---
+
+# 17. TypeScript
+
+Use TypeScript consistently.
+
+Prefer:
+
+- explicit domain types;
+- narrow types;
+- discriminated unions where appropriate;
+- predictable function contracts;
+- avoiding `any`;
+- validation at external/input boundaries.
+
+Do not use TypeScript merely to silence errors.
+
+Types should represent actual domain concepts.
+
+---
+
+# 18. Database
+
+SQLite is the primary MVP database.
+
+The application must work without internet connectivity.
+
+Database operations that represent one business operation must be atomic where necessary.
+
+Examples:
+
+Production should not partially create:
 
 ```text
 Production Batch
 +
 Production Items
 +
-Stock Movement
+Stock Movements
 ```
 
-must succeed or fail as one logical operation.
-
-### Delivery
+Delivery confirmation should not partially create:
 
 ```text
 Delivery
 +
 Delivery Items
 +
-Stock Movement
+Stock Movements
 ```
 
-must remain consistent.
-
-### Reconciliation
+Reconciliation should preserve consistency between:
 
 ```text
-Reconciliation
+Delivered
+=
+Sold
 +
-Reconciliation Items
-+
-Sold / Return Movements
+Returned
 ```
 
-must remain consistent.
+Do not directly manipulate calculated stock balances as if they were independent source data.
 
-Use the transaction capabilities of the selected database implementation.
+Stock should be derived from stock movements or controlled transactional operations.
 
 ---
 
-# 19. Inventory
+# 19. Inventory Rules
 
 Inventory is movement-based.
 
-Do not use a manually editable stock balance as the primary source of truth.
-
-Movement types:
+Relevant movement types include:
 
 ```text
 PRODUCTION
@@ -641,985 +820,474 @@ WASTE
 ADJUSTMENT
 ```
 
-Conceptually:
+Do not create arbitrary stock balance edits as the normal mechanism.
 
-```text
-Owner Stock
-= Production
-+ Return
-- Delivery
-- Owner Waste
-+/- Owner Adjustment
-```
+Stock corrections must remain traceable.
 
-Agent stock:
-
-```text
-Agent Stock
-= Delivery
-- Sold
-- Return
-+/- Agent Adjustment
-```
-
-Negative stock should normally be rejected.
-
-Stock adjustments require a reason and must remain traceable.
+Avoid negative stock unless explicitly permitted by the relevant business rule.
 
 ---
 
-# 20. Production
+# 20. Consignment and Sales Logic
 
-Production records actual production output.
+Remember:
 
-Example:
+> Delivered product is not automatically sold.
 
-```text
-Batch 001
-- Coklat       41
-- Strawberry   42
------------------
-Total          83
-```
-
-The system calculates totals.
-
-Creating production should create the appropriate stock movement.
-
-Do not allow ordinary UI operations to arbitrarily modify resulting stock.
-
----
-
-# 21. Delivery
-
-Delivery planning and actual delivery are separate.
-
-```text
-Delivery Plan
-    ≠
-Delivery
-```
-
-Planning does not change inventory.
-
-Actual delivery changes inventory.
-
-Always preserve:
-
-- planned quantity,
-- actual delivered quantity.
-
-Sales and settlement must be based on actual delivered quantity.
-
----
-
-# 22. Sales Confirmation
-
-The MVP supports:
-
-```text
-HABIS
-TIDAK_HABIS
-```
-
-### HABIS
+For `HABIS`:
 
 ```text
 Sold = Actual Delivered
 Return = 0
 ```
 
-Do not require manual sold quantity.
-
-Do not require physical reconciliation.
-
-### TIDAK_HABIS
-
-Reconciliation is required.
+For `TIDAK_HABIS`:
 
 ```text
 Sold = Delivered - Returned
 ```
 
-Enforce:
+Reconciliation is required before settlement for `TIDAK_HABIS`.
 
-```text
-Returned <= Delivered
-Sold >= 0
-Sold + Returned = Delivered
-```
-
-Settlement must not be finalized before required reconciliation is complete.
+The agent must not invent additional sales states or reconciliation logic without requirements approval.
 
 ---
 
-# 23. Settlement and Financial Logic
+# 21. Financial Logic
 
-Settlement and payment are separate.
-
-```text
-Settlement
-    ≠
-Payment
-```
-
-Core calculations:
-
-```text
-Gross = Sold × Selling Price Snapshot
-
-Fee = Sold × Fee Per Unit Snapshot
-
-Net = Gross - Fee
-```
-
-The MVP uses fixed nominal fee per unit per agent.
-
-Do not introduce:
-
-- percentage commission,
-- agent leveling,
-- automatic fee tiers,
-
-without explicit approval.
-
-Financial calculations must have one authoritative implementation.
-
-Do not duplicate formulas across multiple screens.
-
----
-
-# 24. Monetary Representation
-
-Use a safe representation for Indonesian Rupiah.
-
-Prefer integer-based monetary values where appropriate, such as:
-
-```text
-150000
-```
-
-representing:
-
-```text
-Rp150.000
-```
-
-Avoid floating-point values for monetary calculations.
-
-Do not use formatted strings such as `"Rp 150.000"` as the underlying financial value.
-
-Formatting belongs at the presentation layer.
-
----
-
-# 25. Historical Data
-
-Historical transactions must remain historically correct.
-
-Changing current master data must not alter past transactions.
-
-Examples:
-
-```text
-Current Product Price
-        ↓
-must NOT modify
-        ↓
-Historical Settlement Price
-```
-
-```text
-Current Agent Fee
-        ↓
-must NOT modify
-        ↓
-Historical Settlement Fee
-```
-
-Use snapshots defined by the data model.
-
-When displaying historical financial data, use transaction snapshots rather than current master data.
-
----
-
-# 26. IDs and Relationships
-
-Use stable IDs.
-
-Never use display names as primary identifiers.
-
-Examples:
-
-```text
-product_variant_id
-agent_id
-delivery_id
-settlement_id
-invoice_id
-payment_id
-```
-
-Relationships must be explicit.
-
-Avoid fragile relationships based on:
-
-- display names,
-- array indexes,
-- list order,
-- dates alone.
-
----
-
-# 27. Deletion and Historical Integrity
-
-Do not destructively delete historical transactions.
-
-Used master data should normally be deactivated.
-
-Examples:
-
-```text
-Product Variant → inactive
-Agent           → inactive
-```
-
-Do not silently overwrite historical financial or inventory records.
-
-If correction behavior is not defined in the requirements, request clarification.
-
----
-
-# 28. Offline-First
-
-Treat offline operation as the normal operating condition.
-
-Do not design the application as an online application with an offline fallback.
-
-Core features must work without internet:
-
-- production,
-- inventory,
-- delivery planning,
-- delivery confirmation,
-- sales confirmation,
-- reconciliation,
-- settlement,
-- invoice,
-- payment,
-- reports.
-
-Network-dependent functionality must be isolated.
-
----
-
-# 29. Google Drive Backup
-
-Google Drive backup is optional.
-
-Conceptually:
-
-```text
-Local Database
-      ↓
-Backup File
-      ↓
-Google Drive
-```
-
-Backup is not synchronization.
-
-A backup failure must not:
-
-- corrupt local data,
-- delete local data,
-- roll back valid transactions,
-- block core operations.
-
-Do not implement cloud synchronization as part of the MVP.
-
----
-
-# 30. Future Cloud Compatibility
-
-Prepare the application for a possible future API without implementing the API now.
-
-Good preparation includes:
-
-- stable IDs,
-- clear repository boundaries,
-- historical timestamps,
-- explicit relationships,
-- separation of master and transaction data,
-- business logic independent of SQLite,
-- immutable historical snapshots where required.
-
-Do NOT implement prematurely:
-
-- sync queues,
-- conflict resolution,
-- server-authority rules,
-- retry engines,
-- distributed transactions,
-- multi-device coordination,
-- cloud synchronization tables.
-
----
-
-# 31. Error Handling
-
-Expected business errors must be handled explicitly.
-
-Examples:
-
-```text
-Delivery > Available Stock
-Return > Delivered
-Negative Quantity
-Invalid Settlement
-Invalid Payment
-TIDAK_HABIS without Reconciliation
-Invalid Master Data
-Backup Failure
-```
-
-User-facing errors should be understandable and actionable.
-
-Do not expose raw:
-
-- stack traces,
-- SQL errors,
-- framework exceptions,
-- internal implementation details.
-
-Technical details may be logged appropriately for development/debugging.
-
----
-
-# 32. Testing Strategy
-
-Every meaningful business feature should have appropriate tests.
-
-Prioritize:
-
-### Unit Tests
-
-For:
-
-- business calculations,
-- validation,
-- domain rules,
-- financial formulas,
-- inventory calculations.
-
-### Integration Tests
-
-For:
-
-- repository behavior,
-- database transactions,
-- stock movement creation,
-- settlement/payment relationships.
-
-### UI Tests
-
-For:
-
-- important operational flows,
-- navigation,
-- user input,
-- critical states.
-
-### End-to-End Tests
-
-For important complete workflows.
-
----
-
-# 33. Critical Business Tests
-
-At minimum, protect these invariants:
-
-```text
-Sold + Returned = Delivered
-
-Gross = Sold × Selling Price
-
-Fee = Sold × Fee Per Unit
-
-Net = Gross - Fee
-```
-
-Also test:
-
-```text
-Delivery > Stock → rejected
-
-Return > Delivered → rejected
-
-TIDAK_HABIS without Reconciliation → rejected
-
-Historical Price remains unchanged
-
-Historical Fee remains unchanged
-```
-
-Core operations should also be tested without network access.
-
----
-
-# 34. Test Data
-
-Tests must be deterministic.
-
-Do not depend on:
-
-- live network services,
-- production data,
-- uncontrolled current date/time,
-- random values without controlled seeds,
-- external Google Drive state.
-
-Use meaningful fixtures.
-
-Financial test values should use realistic Rupiah amounts.
-
----
-
-# 35. Dependency Policy
-
-Before adding a dependency, ask:
-
-1. Is it actually necessary?
-2. Does Expo already provide the capability?
-3. Can the functionality be implemented simply?
-4. Does the dependency work reliably with the current Expo setup?
-5. Does it increase maintenance complexity?
-6. Does it introduce network dependency?
-7. Is it needed for the MVP?
-
-Prefer fewer, stable dependencies.
-
-Do not add libraries simply because they are popular in tutorials or boilerplate projects.
-
----
-
-# 36. Expo Rules
-
-Use Expo capabilities whenever they satisfy the requirement.
-
-Do not eject from Expo or introduce custom native code unless there is a concrete requirement that cannot reasonably be satisfied otherwise.
-
-Before introducing native-specific functionality:
-
-1. Verify whether Expo already supports it.
-2. Check compatibility with the current Expo SDK.
-3. Consider whether it affects build/deployment complexity.
-4. Consider whether it is actually required for the MVP.
-
-Keep the application compatible with the chosen Expo workflow.
-
----
-
-# 37. Platform-Specific Code
-
-Keep Android-specific code isolated when possible.
-
-Do not spread platform checks throughout business logic.
-
-Prefer:
-
-```text
-UI / Platform Adapter
-        ↓
-Application / Domain Logic
-```
-
-rather than:
-
-```text
-Domain Logic
-    ↓
-Android-specific APIs
-```
-
-Business rules must remain platform-independent.
-
----
-
-# 38. Async Operations
-
-Handle asynchronous operations explicitly.
-
-UI should correctly represent:
-
-```text
-idle
-loading
-success
-error
-```
-
-where appropriate.
-
-Do not create race conditions by allowing multiple concurrent executions of the same critical business operation.
-
-Examples:
-
-- duplicate payment,
-- duplicate delivery confirmation,
-- duplicate reconciliation,
-- duplicate settlement.
-
-Business-level duplicate protection must not depend solely on disabling a UI button.
-
----
-
-# 39. React State vs Database State
-
-Do not treat React state as permanent business storage.
-
-The general rule is:
-
-```text
-Temporary UI state
-    → React state
-
-Persistent business data
-    → Repository / Database
-```
-
-If the application is restarted, important completed transactions must remain available.
-
----
-
-# 40. UI and UX
-
-Follow `04-UX-Flows.md`.
-
-Prioritize:
-
-- few steps,
-- clear primary actions,
-- readable quantities,
-- readable monetary values,
-- clear statuses,
-- obvious next action,
-- fast operational data entry.
-
-Avoid unnecessary dialogs, confirmation steps, and navigation.
-
-Do not redesign approved business flows merely because another UX pattern appears more fashionable.
-
----
-
-# 41. Dashboard
-
-The dashboard should be operational rather than merely decorative.
-
-It should help answer:
-
-> "Hari ini saya harus mengunjungi siapa dan melakukan apa?"
-
-Dashboard information must be derived from source data.
-
-Do not maintain manually editable dashboard counters.
-
----
-
-# 42. Accessibility and Usability
-
-The application should remain comfortable for routine operational use.
-
-Where appropriate:
-
-- use readable text,
-- use adequate touch targets,
-- provide meaningful labels,
-- avoid relying only on color for important states,
-- provide understandable validation feedback.
-
-Operational clarity is more important than visual complexity.
-
----
-
-# 43. Logging
-
-Logging should help diagnose problems without unnecessarily exposing sensitive information.
-
-Do not log:
-
-- credentials,
-- access tokens,
-- secrets,
-- unnecessary personal information,
-- unnecessary complete financial records.
-
-Avoid excessive logging in production builds.
-
----
-
-# 44. Security
-
-Never commit:
-
-- API keys,
-- passwords,
-- access tokens,
-- private credentials,
-- signing secrets.
-
-Do not hardcode secrets in source code.
-
-Use appropriate secure mechanisms when external credentials are actually required.
-
-Do not introduce a complex authentication system without explicit approval.
-
----
-
-# 45. Performance
-
-Optimize for the actual MVP environment.
-
-The application targets:
-
-- one business,
-- one device,
-- a relatively small dataset,
-- routine operational use.
-
-Prioritize:
-
-- responsive screens,
-- reliable local persistence,
-- efficient queries,
-- fast data entry.
-
-Do not prematurely optimize for enterprise-scale workloads.
-
-Avoid obviously inefficient implementations such as repeated database queries inside large lists when a reasonable batched query is available.
-
----
-
-# 46. Code Quality
-
-Code should be:
-
-- readable,
-- predictable,
-- testable,
-- reasonably modular,
-- consistent.
-
-Prefer clear code over clever code.
-
-Avoid:
-
-- giant components,
-- giant functions,
-- duplicated business logic,
-- magic numbers,
-- hidden side effects,
-- unnecessary global state,
-- unnecessary abstraction layers.
-
----
-
-# 47. Comments
-
-Comments should explain **why**, not merely restate what the code does.
-
-Good:
-
-```ts
-// Keep the historical fee because the agent fee may change later.
-```
-
-Avoid:
-
-```ts
-// Multiply sold quantity by fee.
-const fee = sold * feePerUnit;
-```
-
-Document non-obvious business decisions when necessary.
-
----
-
-# 48. Change Management
-
-Before a substantial change:
-
-1. Identify the requirement.
-2. Identify affected business rules.
-3. Inspect existing code.
-4. Identify affected data.
-5. Identify affected UX.
-6. Identify tests.
-7. Determine whether documentation changes are required.
-
-For non-trivial work:
-
-```text
-PLAN
-  ↓
-REVIEW / APPROVAL
-  ↓
-IMPLEMENT
-  ↓
-TEST
-  ↓
-VERIFY
-```
-
-Do not silently change approved requirements.
-
----
-
-# 49. Do Not Guess Business Rules
-
-Do not invent behavior for unresolved requirements.
+Financial calculations must use historical transaction snapshots where required.
 
 Examples include:
 
-- partial payment,
-- overpayment,
-- payment cancellation,
-- payment method details,
-- delivery cancellation,
-- transaction correction,
-- restore behavior,
-- authentication details,
-- draft behavior,
-- exact status transitions.
+- selling price;
+- agent fee;
+- gross amount;
+- fee amount;
+- net amount.
 
-If the behavior affects inventory, money, historical data, or transaction integrity, ask for clarification.
+Current master-data changes must not rewrite historical transactions.
 
----
+Settlement and payment are separate concepts.
 
-# 50. Scope Discipline
+An invoice may exist before payment.
 
-Only modify files necessary for the requested task.
-
-Do not use a feature task as an excuse to:
-
-- refactor unrelated modules,
-- redesign unrelated screens,
-- upgrade dependencies unnecessarily,
-- rename unrelated classes,
-- restructure the entire project.
-
-If broader refactoring is necessary, explain why.
+Payment must not be treated as proof that the underlying settlement was recalculated.
 
 ---
 
-# 51. Git Discipline
+# 22. Historical Data Integrity
 
-Prefer focused changes.
+Historical transactions must remain stable.
+
+Examples:
+
+Changing:
+
+- product selling price;
+- agent fee;
+- business profile;
+
+must not silently change previously created:
+
+- delivery values;
+- settlement values;
+- invoices;
+- payment history.
+
+Use snapshots where defined by the data model.
+
+---
+
+# 23. Deletion and Correction
+
+Do not destructively delete used transactional records.
+
+For master data that has already been used in transactions:
+
+- prefer deactivation;
+- preserve historical references.
+
+Corrections to historical transactions must remain auditable.
+
+Do not overwrite historical facts merely to make current totals look correct.
+
+If correction behavior is not yet defined by the requirements, record it as an open decision rather than inventing a rule.
+
+---
+
+# 24. Offline-First
+
+Offline is the normal operating condition for the MVP.
+
+Core operations must not require:
+
+- API access;
+- cloud database;
+- continuous internet;
+- Google account;
+- Google Drive.
+
+Internet is only required for external features such as Google Drive backup.
+
+Do not introduce network dependency into core operational flows.
+
+---
+
+# 25. Backup
+
+Google Drive backup is optional MVP functionality.
+
+Remember:
+
+> Backup is not synchronization.
+
+The expected direction is:
 
 ```text
-One logical task
-       ↓
-One logical change
-       ↓
-Focused commit
+Local SQLite
+    ↓
+Backup File
+    ↓
+Google Drive
 ```
 
-Avoid mixing unrelated changes.
+A failed backup must not modify or corrupt the local operational database.
 
-Do not modify unrelated files simply because they could be "cleaned up."
-
----
-
-# 52. Existing Code
-
-Before modifying existing code:
-
-1. Read it.
-2. Understand its dependencies.
-3. Check its tests.
-4. Check relevant requirements.
-5. Identify side effects.
-6. Make the smallest safe change.
-
-Do not rewrite working code solely because another coding style is preferred.
-
-When refactoring, preserve behavior unless the task explicitly changes it.
+Do not implement cloud synchronization, conflict resolution, sync queues, or server-authoritative behavior as part of the MVP unless explicitly approved.
 
 ---
 
-# 53. Documentation Synchronization
+# 26. Future Cloud Compatibility
 
-Code must not become the accidental source of truth.
-
-If implementation reveals an incomplete or contradictory requirement:
-
-1. Stop before making a consequential assumption.
-2. Explain the issue.
-3. Propose the smallest reasonable change.
-4. Obtain approval.
-5. Update the relevant documentation.
-6. Then implement the approved behavior.
-
-The intended relationship is:
+The architecture should allow future evolution toward:
 
 ```text
-Requirements
-     ↓
-Design
-     ↓
-Implementation
-     ↓
-Tests
+Android
+    ↓
+Repository / Sync Layer
+    ↓
+Laravel API
+    ↓
+PostgreSQL
 ```
 
-Not:
+and:
 
 ```text
-Implementation
-     ↓
-Whatever the requirements must have meant
+Web / Admin
+    ↓
+Filament
+    ↓
+Laravel
 ```
+
+For future compatibility, preserve:
+
+- stable IDs;
+- relevant timestamps;
+- historical transactions;
+- separation of master and transaction data;
+- repository boundaries;
+- business logic independent from SQLite.
+
+Do not implement:
+
+- sync queues;
+- conflict resolution;
+- server authority;
+- distributed transactions;
+- multi-device synchronization;
+
+unless they are explicitly added to scope.
 
 ---
 
-# 54. Feature Development Workflow
+# 27. Validation and Error Handling
 
-For a new feature:
+Validate data at appropriate boundaries.
 
-### Step 1 — Read
+User-facing validation errors should be understandable and actionable.
 
-Read the relevant requirements and existing implementation.
+Do not expose raw technical errors to normal users when a useful business-level message can be provided.
 
-### Step 2 — Understand
-
-Identify the intended business flow.
-
-### Step 3 — Plan
-
-Identify:
-
-- screens,
-- components,
-- use cases,
-- domain rules,
-- repository operations,
-- database changes,
-- tests.
-
-### Step 4 — Review
-
-For non-trivial work, present the plan before implementation.
-
-### Step 5 — Implement
-
-Implement the smallest complete feature slice.
-
-### Step 6 — Test
-
-Add or update relevant tests.
-
-### Step 7 — Verify
-
-Verify:
-
-- business rules,
-- data integrity,
-- offline behavior,
-- UX flow,
-- regression risk.
-
-### Step 8 — Report
-
-Report:
-
-- what changed,
-- files affected,
-- tests executed,
-- build result,
-- unresolved issues,
-- documentation changes.
+For critical financial or inventory operations, errors must not leave partial transaction state.
 
 ---
 
-# 55. Definition of Done
+# 28. Testing
 
-A feature is not complete merely because:
+Testing must cover behavior, not only implementation details.
 
-- the application compiles,
-- the screen appears,
-- the database accepts the input,
-- the happy path works.
+Prioritize tests for:
 
-A feature is complete when:
+- business rules;
+- financial calculations;
+- inventory movement;
+- stock calculations;
+- delivery confirmation;
+- sales confirmation;
+- reconciliation;
+- settlement;
+- historical snapshots;
+- payment/outstanding;
+- data integrity.
 
-1. The approved requirement is implemented.
-2. Business rules are respected.
-3. Data remains consistent.
-4. Historical data remains correct.
-5. Expected errors are handled.
-6. Relevant tests exist.
-7. Relevant tests pass.
-8. Offline behavior remains intact where required.
-9. Existing behavior is not unintentionally broken.
-10. Documentation is updated when an approved requirement changes.
+UI tests should cover important user flows where practical.
 
----
-
-# 56. Priority When Making Trade-offs
-
-When implementation choices conflict, prioritize:
-
-```text
-1. Data integrity
-2. Business-rule correctness
-3. Financial correctness
-4. Approved UX flow
-5. Operational simplicity
-6. Maintainability
-7. Future compatibility
-8. Performance optimization
-9. Architectural elegance
-```
-
-Do not sacrifice business correctness merely to make the code cleaner or more sophisticated.
+Every task must perform testing appropriate to its scope.
 
 ---
 
-# 57. Final Agent Principle
+# 29. Code Quality
 
-Build the smallest reliable system that correctly supports the approved business process.
+Prefer:
 
-The project follows this principle:
+- simple code;
+- readable naming;
+- small functions;
+- clear responsibilities;
+- explicit data transformations;
+- minimal duplication where practical;
+- existing project conventions.
 
-> **Build simple for today, but don't design yourself into a dead end for tomorrow.**
+Avoid:
 
-The agent should optimize for:
+- premature abstractions;
+- unnecessary generic frameworks;
+- speculative features;
+- excessive indirection;
+- duplicated business logic;
+- hidden side effects.
+
+Do not refactor unrelated code merely because it could be improved.
+
+---
+
+# 30. Dependency Policy
+
+Before adding a dependency:
+
+1. confirm that the requirement genuinely needs it;
+2. check whether existing project capabilities are sufficient;
+3. consider maintenance and compatibility;
+4. avoid adding multiple libraries for overlapping purposes.
+
+A dependency should solve a real project problem.
+
+Do not introduce a library simply because it is commonly used in React Native projects.
+
+---
+
+# 31. Security
+
+Even though the MVP is an internal single-device application:
+
+- do not hard-code secrets;
+- do not commit credentials;
+- do not expose sensitive information unnecessarily;
+- validate external input;
+- protect backup-related credentials/tokens appropriately;
+- do not treat client-side checks as future server authorization.
+
+Future authentication and authorization must be designed separately from the MVP's local operational workflow.
+
+---
+
+# 32. Performance
+
+Do not optimize prematurely.
+
+Prioritize:
+
+- correct business behavior;
+- database integrity;
+- simple user flows;
+- predictable rendering;
+- reasonable list performance.
+
+Optimize based on an identified problem rather than speculation.
+
+---
+
+# 33. Logging and Diagnostics
+
+Logs should help diagnose operational or technical problems.
+
+Avoid logging:
+
+- credentials;
+- access tokens;
+- unnecessary personal information;
+- sensitive business information when not required.
+
+Production-oriented logging should remain useful without becoming noisy.
+
+---
+
+# 34. Existing Code
+
+Before creating new code, inspect the existing implementation.
+
+Prefer extending or correcting existing structures when appropriate.
+
+Do not create duplicate:
+
+- models;
+- repositories;
+- business logic;
+- components;
+- utilities;
+
+without first checking whether an existing implementation already serves the purpose.
+
+When existing code conflicts with approved requirements, follow the approved requirements and document the necessary change.
+
+---
+
+# 35. Documentation Synchronization
+
+If implementation changes any behavior defined by the requirement documents, the relevant documentation must be updated.
+
+At minimum, consider whether the change affects:
+
+- PRD;
+- business rules;
+- functional requirements;
+- UX flows;
+- data model;
+- acceptance criteria;
+- backlog;
+- task registry;
+- task log.
+
+Do not allow implementation and requirements to silently diverge.
+
+---
+
+# 36. Scope Discipline
+
+Do not expand a task because an unrelated improvement is noticed.
+
+If additional work is discovered:
+
+1. record it;
+2. create or propose a separate backlog item/task;
+3. keep the current task focused.
+
+Exceptions are limited to changes that are necessary to correctly complete the current task.
+
+---
+
+# 37. Working with AI Coding Tools
+
+The agent should behave as an implementation assistant, not as the product owner.
+
+The agent may:
+
+- inspect the codebase;
+- identify implementation issues;
+- propose technical solutions;
+- implement approved scope;
+- create tests;
+- run previews;
+- record evidence;
+- identify requirement conflicts;
+- propose follow-up tasks.
+
+The agent must not independently decide:
+
+- new business rules;
+- changes to financial calculations;
+- changes to transaction lifecycle;
+- major scope expansion;
+- replacement of approved architecture;
+- removal of confirmed requirements.
+
+When a decision has meaningful product or business impact, surface it for human review.
+
+---
+
+# 38. Completion Definition
+
+A task is complete only when all applicable conditions are satisfied:
+
+- implementation is complete;
+- relevant tests pass;
+- Expo preview has been run when required;
+- actual behavior has been verified;
+- relevant acceptance criteria are satisfied;
+- task log is updated;
+- `TASK.md` status is updated;
+- `BACKLOG.md` is updated when appropriate.
+
+A backlog item is complete only when:
+
+- all required tasks are complete;
+- relevant acceptance criteria are satisfied;
+- the integrated behavior has been verified;
+- no known blocking issue remains.
+
+---
+
+# 39. Minimum Agent Report
+
+When reporting a completed task, provide a concise summary containing:
 
 ```text
-Correctness
-+
-Reliability
-+
-Traceability
-+
-Offline operation
-+
-Testability
-+
-Maintainability
+Task:
+Status:
+
+Implemented:
+- ...
+
+Tests:
+- ...
+
+Preview:
+- ...
+
+Verification:
+- ...
+
+Files changed:
+- ...
+
+Evidence / Task Log:
+- /task/[task-id].txt
+
+Follow-up:
+- ...
 ```
 
-not for:
+If the task cannot be fully verified, explicitly state:
 
 ```text
-Maximum abstraction
-+
-Maximum number of libraries
-+
-Maximum architectural complexity
+Status: NOT VERIFIED
+Reason: ...
+Remaining verification: ...
 ```
 
-The goal is not to build the most sophisticated application possible.
+Never report an unverified task as complete.
 
-The goal is to build the **simplest reliable application that correctly serves the business today while preserving a reasonable path for future evolution**.
+---
+
+# 40. Final Principles
+
+The agent must consistently follow these principles:
+
+1. Requirements are the source of truth.
+2. Backlog is the bridge between requirements and implementation.
+3. `TASK.md` is the central task registry.
+4. `/task/[task-id].txt` records task execution history and evidence.
+5. Tasks must be small and focused.
+6. Code must not silently change approved business rules.
+7. Tests are required.
+8. Application preview is a quality gate.
+9. Passing tests or compiling code alone does not mean DONE.
+10. Inventory and financial data must remain traceable.
+11. Historical transactions must remain stable.
+12. Offline operation is fundamental to the MVP.
+13. Backup is not synchronization.
+14. Future-readiness must not become premature complexity.
+15. Keep documentation and implementation synchronized.
+16. Build simple for today, but do not design yourself into a dead end for tomorrow.

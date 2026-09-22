@@ -1,0 +1,47 @@
+TASK ID: BL-016-01
+TITLE: Buat BACKLOG.md, TASK.md, dan log tugas (reconciliation)
+STATUS: DONE
+
+BACKLOG: BL-016 — Sinkronisasi dokumentasi
+REQUIREMENTS: `AGENTS.md` §5, §6, §7, §9, §13
+ACCEPTANCE CRITERIA: — (artefak manajemen kerja)
+
+SCOPE:
+Membuat lapisan manajemen kerja yang sebelumnya tidak ada, sebagai hasil *Project Development State
+Reconciliation* setelah `AGENTS.md` diperbarui:
+- `BACKLOG.md` (18 backlog item, status, prioritas, traceability requirement/AC, technical debt)
+- `TASK.md` (112 task, status, tautan log)
+- `task/[task-id].txt` (log retrospektif untuk seluruh task yang sudah dikerjakan)
+
+IMPLEMENTATION:
+Status task ditetapkan dari bukti: berkas kode, output `npx jest` / `npx tsc --noEmit` / `npx eslint .`,
+audit `grep`, dan `git status`/`git diff`. Bukti test/preview yang tidak tersedia dicatat `UNKNOWN`.
+
+FILES CHANGED:
+- BACKLOG.md (baru)
+- TASK.md (baru)
+- task/*.txt (baru, 36 log retrospektif + log reconciliation)
+
+TEST:
+TIDAK BERLAKU (artefak dokumentasi). Konsistensi jumlah task di `TASK.md` dengan tabel `BACKLOG.md`
+diperiksa manual (112 task pada 18 backlog item).
+
+PREVIEW:
+TIDAK BERLAKU.
+
+VERIFICATION:
+DONE — berkas ada di repository dan dapat diperiksa: `BACKLOG.md`, `TASK.md`, dan direktori `task/`.
+
+EVIDENCE:
+Berkas `BACKLOG.md`, `TASK.md`, dan isi direktori `task/`.
+
+ISSUES:
+Log bersifat retrospektif: tidak ada catatan pelaksanaan asli untuk pekerjaan Fase 0-2,
+sehingga Test Evidence dan Preview Evidence lama tercatat `UNKNOWN`.
+
+DECISIONS:
+Tidak ada pekerjaan lama yang dihapus atau ditandai ulang; tidak ada task yang dinaikkan statusnya
+melampaui bukti yang tersedia.
+
+NOTES:
+Dibuat 2026-09-22 pada sesi reconciliation AGENTS.md.

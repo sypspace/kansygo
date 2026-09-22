@@ -1,0 +1,52 @@
+TASK ID: BL-009-04
+TITLE: Use case Reconciliation + movement
+STATUS: TODO
+
+BACKLOG: BL-009 — Sales/Recon
+REQUIREMENTS: FR-SC-001..004, FR-RC-001..008; BR-SC-001..005, BR-RC-001..008; 05-Data-Model.md §14 s.d. §17; 04-UX-Flows.md §9 s.d. §14; D-18
+ACCEPTANCE CRITERIA: AC-SC-001..003, AC-RC-001..006, AC-IV-004, AC-IV-005
+
+OBJECTIVE:
+Use case Reconciliation + movement.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

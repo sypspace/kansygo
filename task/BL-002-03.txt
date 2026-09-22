@@ -1,0 +1,42 @@
+TASK ID: BL-002-03
+TITLE: Use case ProductService
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-002 — Product Variant (master data)
+REQUIREMENTS: FR-PR-001 s.d. FR-PR-004, FR-PR-007; BR-PR-004; D-09, D-13
+ACCEPTANCE CRITERIA: AC-PR-001, AC-PR-003, AC-DI-005
+
+SCOPE:
+Use case master produk: list, getById, create, update, setActive, dan getDeactivationWarnings.
+Validasi dijalankan ulang di lapisan ini sebelum menyimpan; ID baru memakai generator UUID (D-09).
+
+IMPLEMENTATION:
+createProductService (factory dengan dependency repository, clock, ids). Error domain:
+ValidationError untuk input tidak valid, NotFoundError untuk data tidak ditemukan.
+
+FILES CHANGED:
+- src/application/master/productService.ts
+- src/application/ports.ts (Clock, IdGenerator)
+- src/ui/providers/buildAppServices.ts (perakitan dependency)
+
+TEST:
+Belum ada test khusus use case; logika validasi sudah diuji pada BL-002-02.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan application).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode; perakitan pada buildAppServices.
+
+ISSUES:
+getDeactivationWarnings masih mengembalikan array kosong karena inventory (stok) belum ada.
+Wajib diisi saat BL-006 dikerjakan (D-13).
+
+DECISIONS:
+UI tidak pernah memanggil repository secara langsung (hanya melalui use case).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

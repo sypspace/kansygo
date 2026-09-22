@@ -1,0 +1,40 @@
+TASK ID: BL-004-01
+TITLE: Repository Business Profile (single row)
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-004 — Business Profile & User Profile
+REQUIREMENTS: FR-BP-001, FR-BP-002, FR-BP-003; BR-BP-001 s.d. BR-BP-003; `05-Data-Model.md` §4; D-15
+ACCEPTANCE CRITERIA: AC-BP-001, AC-BP-002
+
+SCOPE:
+Repository business profile dengan pola baris tunggal: get() dan save(record).
+Field: name, legal_name, tax_id (NPWP), address, phone, email, logo_uri, invoice_prefix.
+
+IMPLEMENTATION:
+src/data/repositories/businessRepository.ts. Penyimpanan memakai UPSERT pada id = 1
+(ON CONFLICT(id) DO UPDATE), sehingga tidak mungkin ada lebih dari satu business (BR-BP-001).
+
+FILES CHANGED:
+- src/data/repositories/businessRepository.ts
+
+TEST:
+Belum ada integration test repository business (lihat BL-004-08).
+Penolakan baris business kedua diuji lewat constraint CHECK (id = 1) pada src/data/db/migrations.test.ts.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode repository; test constraint business pada output `npx jest` 2026-09-22.
+
+ISSUES:
+Belum ada test untuk jalur UPSERT (update setelah baris pertama ada).
+
+DECISIONS:
+D-15: field opsional legal_name, tax_id, invoice_prefix (default INV) ditambahkan untuk kebutuhan invoice.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

@@ -1,0 +1,39 @@
+TASK ID: BL-004-04
+TITLE: Use case BusinessProfileService
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-004 — Business Profile & User Profile
+REQUIREMENTS: FR-BP-001, FR-BP-002; BR-BP-002; D-15
+ACCEPTANCE CRITERIA: AC-BP-001, AC-BP-002
+
+SCOPE:
+Use case business profile: get() dan save(values). validasi dijalankan sebelum penyimpanan;
+created_at dipertahankan pada penyimpanan ulang.
+
+IMPLEMENTATION:
+createBusinessProfileService (dependency repository, clock) di src/application/master/businessProfileService.ts.
+
+FILES CHANGED:
+- src/application/master/businessProfileService.ts
+- src/ui/providers/buildAppServices.ts (perakitan)
+
+TEST:
+Belum ada test khusus use case; validasi diuji pada BL-004-03.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan application).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode; perakitan pada buildAppServices.
+
+ISSUES:
+Snapshot identitas bisnis pada invoice belum ada karena modul invoice belum dibangun (FR-BP-003, BL-010).
+
+DECISIONS:
+Perubahan business profile tidak boleh mengubah dokumen historis; snapshot dilakukan saat invoice dibuat.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

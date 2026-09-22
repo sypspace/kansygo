@@ -1,0 +1,45 @@
+TASK ID: BL-001-02
+TITLE: Toolchain verifikasi (jest-expo, RNTL, node:sqlite, eslint)
+STATUS: TESTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `AGENTS.md` §28 (Testing); `00-Baseline.md` §3
+ACCEPTANCE CRITERIA: — (prasyarat AC-APP-004 dan AC-DI-001)
+
+SCOPE:
+Konfigurasi jest (preset jest-expo, moduleNameMapper @/, transformIgnorePatterns), React Native Testing Library,
+adapter test node:sqlite, eslint-config-expo, dan skrip npm test/typecheck/lint.
+
+IMPLEMENTATION:
+Konfigurasi jest berada di package.json; adapter in-memory berbasis node:sqlite;
+helper createMigratedTestDatabase agar integration test memakai skema aplikasi yang sama.
+
+FILES CHANGED:
+- package.json (blok jest + devDependencies)
+- src/data/db/testing/nodeSqliteExecutor.ts
+- src/data/db/testing/createMigratedTestDatabase.ts
+- eslint.config.js
+
+TEST:
+Dijalankan pada reconciliation (2026-09-22, Node v22.21.1):
+- `npx jest` → 5 suite, 30 test lulus, 1 test gagal (migrations.test.ts, lihat BL-005-03)
+- `npx tsc --noEmit` → 13 error (lihat BL-005-01 dan BL-001-11)
+- `npx eslint .` → 3 error + 5 warning (lihat BL-001-11 dan BL-005-01)
+
+PREVIEW:
+TIDAK BERLAKU (toolchain, bukan alur UI).
+
+VERIFICATION:
+UNKNOWN — eksekusi terakhir masih merah karena pekerjaan Fase 2 belum selesai, sehingga baseline hijau tidak pernah tercatat.
+
+EVIDENCE:
+Output jest/tsc/eslint 2026-09-22 (dikutip pada `BACKLOG.md` §5).
+
+ISSUES:
+Belum ada coverage threshold maupun CI; pengujian masih manual.
+
+DECISIONS:
+node:sqlite dipakai hanya untuk test agar tidak memerlukan emulator/device.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

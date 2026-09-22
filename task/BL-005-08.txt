@@ -1,0 +1,49 @@
+TASK ID: BL-005-08
+TITLE: Use case ProductionService (batch, item, simpan ke stock)
+STATUS: IN_PROGRESS
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: FR-PD-001 s.d. FR-PD-007; BR-PD-001 s.d. BR-PD-007; FR-IV-004; D-07, D-08, D-18
+ACCEPTANCE CRITERIA: AC-PD-001, AC-PD-003, AC-PD-004, AC-IV-001
+
+SCOPE:
+Interface ProductionService direncanakan memuat: listBatches, getBatchById, createBatch, updateBatch,
+deleteBatch, addItem, removeItem, dan saveToStock (batch final → stock movement PRODUCTION ke Owner Stock).
+
+IMPLEMENTATION:
+Baru createBatch yang terimplementasi: validasi batch, penentuan urutan nomor batch per tanggal,
+pembuatan batch berstatus DRAFT, dan pembacaan ulang hasil simpan.
+
+FILES CHANGED:
+- src/application/production/productionService.ts
+
+TEST:
+Belum ada test. Build gagal (lihat ISSUES), sehingga status TESTED tidak dapat dicapai.
+
+PREVIEW:
+UNKNOWN — layar produksi belum ada (BL-005-10), sehingga alur ini belum dapat di-preview.
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Output `npx tsc --noEmit` 2026-09-22: 6 error pada berkas ini, antara lain
+- modul `../../data/repositories/stockMovementRepository` tidak ditemukan (BL-005-06)
+- `ProductVariant` diimpor dari ../../domain/types padahal didefinisikan di domain/master/types
+- implementasi hanya memuat sebagian anggota interface ProductionService (updateBatch, deleteBatch,
+  addItem, removeItem, saveToStock belum ada)
+- `batchValidation.value` diakses padahal tipe hasil validasi belum memuat `value`
+
+ISSUES:
+1. Berkas ini adalah penyebab utama build merah → BL-005-01.
+2. Belum ada mekanisme atomik untuk saveToStock (batch items + batch status + stock movements)
+   yang wajib bersifat satu transaksi (BR-DI-001, `08-Technical-Architecture.md` §11).
+3. Helper `requireBatch`, `listAllProductVariants`, `getItemVariantIdsInBatch` belum dipakai
+   (5 warning eslint).
+
+DECISIONS:
+Tidak ada; pekerjaan berhenti pada tahap setengah jalan sebelum keputusan requirement BL-017-01/02 diambil.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.
+Pekerjaan ini belum di-commit dan belum dapat dilanjutkan sebelum BL-005-01 dan keputusan BL-017 selesai.

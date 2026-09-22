@@ -1,0 +1,49 @@
+TASK ID: BL-005-02
+TITLE: Skema v2 (production_batches, production_items, stock_movements)
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: `05-Data-Model.md` §8, §9, §25, §26, §27; BR-PD-002, BR-PD-003; D-07, D-09, D-10
+ACCEPTANCE CRITERIA: AC-PD-001, AC-PD-003, AC-IV-001
+
+SCOPE:
+Migrasi v2 menambahkan tiga tabel dan index pendukung:
+- production_batches (id, batch_number, production_date, status DRAFT/FINAL, notes, timestamps)
+- production_items (batch, varian, quantity > 0; UNIQUE per batch+varian; FK cascade ke batch)
+- stock_movements (varian, quantity > 0, movement_type, location OWNER/AGENT, direction IN/OUT,
+  source_batch_id, source_type, reference_id, note, timestamps)
+
+IMPLEMENTATION:
+src/data/db/schema/v2.ts (V2_SQL) dan pendaftaran migrasi v2 di src/data/db/migrations.ts.
+Batch number helper generateBatchNumber(productionDate, sequence) juga berada di berkas ini.
+
+FILES CHANGED:
+- src/data/db/schema/v2.ts
+- src/data/db/migrations.ts (MIGRATIONS + CURRENT_SCHEMA_VERSION = 2)
+
+TEST:
+Migrasi berjalan (PRAGMA user_version = 2) sehingga pembuatan tabel terbukti dieksekusi,
+tetapi test "membuat seluruh tabel master dan index pendukung" GAGAL karena ekspektasi daftar index
+belum diperbarui (lihat BL-005-03). Status TESTED belum dicapai.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-PD-003/AC-IV-001.
+
+EVIDENCE:
+src/data/db/schema/v2.ts; output `npx jest` 2026-09-22 (1 test gagal pada daftar index).
+
+ISSUES:
+- Bentuk kolom stock_movements tidak sama dengan `05-Data-Model.md` §25
+  (from_location/to_location/source_id/movement_date) — keputusan menunggu BL-017-03.
+- Kolom status DRAFT/FINAL tidak ada pada data model §8 dan tidak disebut D-10 — menunggu BL-017-02.
+- `created_by` yang ada pada data model §8 belum ditambahkan.
+
+DECISIONS:
+Stock movement dirancang umum agar bisa dipakai ulang fase DELIVERY/RETURN/SOLD/WASTE/ADJUSTMENT.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.
+Pekerjaan Fase 2 belum di-commit pada saat reconciliation.

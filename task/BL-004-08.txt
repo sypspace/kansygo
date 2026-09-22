@@ -1,0 +1,52 @@
+TASK ID: BL-004-08
+TITLE: Integration test repo business & user
+STATUS: TODO
+
+BACKLOG: BL-004 — Profile
+REQUIREMENTS: FR-BP-001..003, FR-US-001..003; BR-BP-001..004, BR-US-001..006; 05-Data-Model.md §4-§5; D-01, D-11, D-15
+ACCEPTANCE CRITERIA: AC-BP-001..003, AC-US-001, AC-US-002
+
+OBJECTIVE:
+Integration test repo business & user.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

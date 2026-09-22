@@ -1,0 +1,48 @@
+TASK ID: BL-005-07
+TITLE: Validasi produksi (batch & item)
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: FR-PD-001, FR-PD-002, FR-PD-004; BR-PD-001, BR-PD-003; BR-PR-006 (varian harus aktif)
+ACCEPTANCE CRITERIA: AC-PD-001, AC-PD-002
+
+SCOPE:
+Validasi domain produksi:
+- validateProductionBatchForm: tanggal produksi format YYYY-MM-DD valid + keterangan wajib (maks 240 karakter)
+- validateProductionItemForm: varian wajib dipilih, harus ada, harus aktif, tidak duplikat dalam batch,
+  quantity integer > 0, keterangan item wajib (maks 120 karakter)
+- validateProductionItemsForm: validasi koleksi item per index
+
+IMPLEMENTATION:
+validateProductionBatchForm, validateProductionItemForm, dan validateProductionItemsForm di
+src/domain/production/validation.ts, memakai helper murni isoDate, positiveInteger, dan requiredText
+dari src/domain/validation.ts.
+
+FILES CHANGED:
+- src/domain/production/validation.ts
+- src/domain/types.ts (ProductionBatchFormValues, ProductionItemFormValues, ProductionItemsFormValues)
+
+TEST:
+Belum ada test untuk validasi produksi.
+
+PREVIEW:
+TIDAK BERLAKU (validasi domain murni).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode; output `npx tsc --noEmit` 2026-09-22 menunjukkan berkas ini GAGAL dikompilasi:
+- `FieldErrors` diimpor dari ../types padahal didefinisikan di ../errors
+- `collect` tidak diimpor dari ../validation
+
+ISSUES:
+Berkas ini adalah bagian dari build yang merah. Wajib diperbaiki pada BL-005-01 sebelum dapat dikatakan
+IMPLEMENTED secara fungsional. Pesan error juga menyimpan spasi di awal.
+
+DECISIONS:
+Keterangan batch dianggap wajib pada implementasi ini; requirement tidak menyatakan keterangan wajib,
+sehingga keputusan ini perlu dikonfirmasi saat validasi produksi diuji (BL-005-13).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

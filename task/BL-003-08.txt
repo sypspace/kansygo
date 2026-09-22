@@ -1,0 +1,52 @@
+TASK ID: BL-003-08
+TITLE: Expo preview & verifikasi agent
+STATUS: TODO
+
+BACKLOG: BL-003 — Agent
+REQUIREMENTS: FR-AG-001..007; BR-AG-001..005; 05-Data-Model.md §7; 04-UX-Flows.md §29-§30; D-13
+ACCEPTANCE CRITERIA: AC-AG-001..004
+
+OBJECTIVE:
+Expo preview & verifikasi agent.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

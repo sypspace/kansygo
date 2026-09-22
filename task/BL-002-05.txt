@@ -1,0 +1,40 @@
+TASK ID: BL-002-05
+TITLE: Layar tambah produk
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-002 — Product Variant (master data)
+REQUIREMENTS: FR-PR-002, FR-PR-005; `04-UX-Flows.md` §28 (UX-FLOW-PR-001 bagian "Add Product")
+ACCEPTANCE CRITERIA: AC-PR-001, AC-PR-002
+
+SCOPE:
+Form tambah Product Variant: nama, harga jual (Rp), batas low stock, deskripsi opsional;
+validasi inline per field, pesan kesalahan yang dapat dibaca pengguna, dan navigasi ke detail setelah tersimpan.
+
+IMPLEMENTATION:
+src/app/products/new.tsx memakai hook useEntityForm (src/ui/hooks/useEntityForm.ts) yang menjalankan validasi UI
+lalu memanggil use case products.create; ValidationError dari application dipetakan kembali ke error per field.
+
+FILES CHANGED:
+- src/app/products/new.tsx
+- src/ui/hooks/useEntityForm.ts (dipakai bersama seluruh form master data)
+
+TEST:
+Tidak ada component test untuk form ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-PR-001/AC-PR-002.
+
+EVIDENCE:
+Kode layar; rute products/new terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Tidak ada test komponen untuk memastikan error per field tampil pada form.
+
+DECISIONS:
+Validasi dijalankan di UI untuk umpan balik cepat dan diulang di application sebagai pertahanan terakhir.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

@@ -1,0 +1,41 @@
+TASK ID: BL-003-02
+TITLE: Validasi form agent
+STATUS: TESTED
+
+BACKLOG: BL-003 — Agent (master data)
+REQUIREMENTS: FR-AG-002, FR-AG-006; BR-AG-001, BR-AG-002
+ACCEPTANCE CRITERIA: AC-AG-001, AC-AG-003 (fee integer)
+
+SCOPE:
+Validasi domain untuk Agent: nama wajib (maks 120 karakter), fee per unit integer non-negatif,
+kontak/alamat/lokasi opsional (maks 240 karakter, dinormalisasi menjadi null bila kosong).
+
+IMPLEMENTATION:
+validateAgentForm di src/domain/master/validation.ts memakai helper murni nonNegativeInteger dan optionalText.
+
+FILES CHANGED:
+- src/domain/master/validation.ts
+- src/domain/master/types.ts (AgentFormValues, AgentValidatedValues, EMPTY_AGENT_FORM)
+- src/domain/master/validation.test.ts
+
+TEST:
+src/domain/master/validation.test.ts, describe "validateAgentForm": 2 test lulus pada reconciliation
+(fee per unit integer diterima; fee bukan angka ditolak).
+
+PREVIEW:
+TIDAK BERLAKU (validasi domain murni).
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-AG-001/AC-AG-003 pada aplikasi (lihat BL-003-08).
+
+EVIDENCE:
+Output `npx jest` 2026-09-22 (suite src/domain/master/validation.test.ts PASS).
+
+ISSUES:
+Belum ada test untuk batas panjang nama/kontak.
+
+DECISIONS:
+Fee per unit disimpan sebagai integer rupiah dan disimpan ulang sebagai snapshot saat settlement dibuat (AC-AG-004, BL-010).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

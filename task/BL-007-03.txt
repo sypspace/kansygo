@@ -1,0 +1,52 @@
+TASK ID: BL-007-03
+TITLE: Use case delivery plan
+STATUS: TODO
+
+BACKLOG: BL-007 — Delivery Planning
+REQUIREMENTS: FR-DP-001..007; BR-DP-001..008; 05-Data-Model.md §10-§11; 04-UX-Flows.md §6, §8; D-02, D-10, D-16
+ACCEPTANCE CRITERIA: AC-DP-001, AC-DP-002
+
+OBJECTIVE:
+Use case delivery plan.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

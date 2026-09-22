@@ -1,66 +1,101 @@
 /**
- * Domain constants terpusat (AGENTS.md §11).
+ * Tipe produksi dan stock movement (Fase 2).
  *
- * Jangan membuat penamaan alternatif untuk state bisnis yang sudah disetujui.
+ * Ditambahkan sesuai rencana Fase 2 — Production & inventory.
  */
 
-/** Hasil penjualan harian Agent (BR-SC-001). */
-export const SALES_RESULTS = ["HABIS", "TIDAK_HABIS"] as const;
-export type SalesResult = (typeof SALES_RESULTS)[number];
+/**
+ * Status batch produksi (D-10).
+ * - DRAFT: batch baru, belum ada item final, boleh diedit/dihapus.
+ * - FINAL: sudah disimpan ke stock movement, tidak boleh diedit/dihapus via alur biasa.
+ */
+export const PRODUCTION_BATCH_STATUSES = ["DRAFT", "FINAL"] as const;
+export type ProductionBatchStatus = (typeof PRODUCTION_BATCH_STATUSES)[number];
 
-/** Sumber pergerakan inventory (05-Data-Model.md §26). */
-export const STOCK_MOVEMENT_TYPES = [
-  "PRODUCTION",
-  "DELIVERY",
-  "RETURN",
-  "SOLD",
-  "WASTE",
-  "ADJUSTMENT",
-] as const;
-export type StockMovementType = (typeof STOCK_MOVEMENT_TYPES)[number];
+/**
+ * Arah movement inventory (IN/OUT).
+ */
+export const STOCK_DIRECTIONS = ["IN", "OUT"] as const;
+export type StockDirection = (typeof STOCK_DIRECTIONS)[number];
 
-/** Lokasi inventory pada MVP (05-Data-Model.md §27). */
-export const INVENTORY_LOCATIONS = ["OWNER", "AGENT"] as const;
-export type InventoryLocation = (typeof INVENTORY_LOCATIONS)[number];
+/**
+ * Record produksi batch.
+ */
+export interface ProductionBatch {
+  id: string;
+  batchNumber: string;
+  productionDate: string;
+  status: ProductionBatchStatus;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
-/** Jenis transaksi sumber stock movement (§29). */
-export const STOCK_SOURCE_TYPES = [
-  "PRODUCTION",
-  "DELIVERY",
-  "SALES_CONFIRMATION",
-  "RECONCILIATION",
-  "ADJUSTMENT",
-  "CORRECTION",
-] as const;
-export type StockSourceType = (typeof STOCK_SOURCE_TYPES)[number];
+/**
+ * Item dalam satu batch produksi.
+ * Satu varian hanya boleh satu entry per batch.
+ */
+export interface ProductionItem {
+  id: string;
+  productionBatchId: string;
+  productVariantId: string;
+  quantity: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
-/** Alasan stock adjustment (FR-IV-008). */
-export const ADJUSTMENT_REASONS = [
-  "DAMAGED_GOODS",
-  "MELTED_UNUSABLE",
-  "PRODUCTION_ERROR",
-  "TESTER_SAMPLE",
-  "LOSS",
-  "STOCK_OPNAME_CORRECTION",
-] as const;
-export type AdjustmentReason = (typeof ADJUSTMENT_REASONS)[number];
+/**
+ * Movement inventory umum (bukan khusus PRODUCTION).
+ *
+ * Struktur ini dirancang agar bisa dipakai juga untuk DELIVERY, RETURN,
+ * SOLD, WASTE, ADJUSTMENT, dan CORRECTION di fase selanjutnya tanpa
+ * mengubah bentuk tabel dasar.
+ */
+export interface StockMovement {
+  id: string;
+  productVariantId: string;
+  quantity: number;
+  movementType: StockMovementType;
+  location: InventoryLocation;
+  direction: StockDirection;
+  sourceBatchId: string | null;
+  sourceType: StockSourceType | null;
+  referenceId: string | null;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
-/** Status Delivery Plan (D-10). */
-export const DELIVERY_PLAN_STATUSES = ["ACTIVE", "COMPLETED"] as const;
-export type DeliveryPlanStatus = (typeof DELIVERY_PLAN_STATUSES)[number];
+/**
+ * Format nomor batch tampilan: BT-YYYYMMDD-NNN.
+ *
+ * NNN adalah urutan per hari sesuai production_date.
+ * Nomor batch ditentukan saat batch dibuat dan tidak berubah meskipun
+ * production_date di-edit (evaluasi petugas input).
+ */
+export type BatchNumber = string;
 
-/** Status Delivery (D-10). */
-export const DELIVERY_STATUSES = ["CONFIRMED"] as const;
-export type DeliveryStatus = (typeof DELIVERY_STATUSES)[number];
+/**
+ * Input form untuk membuat/memperbarui batch produksi.
+ */
+export interface ProductionBatchFormValues {
+  productionDate: string;
+  notes: string;
+}
 
-/** Metode pembayaran (D-05). */
-export const PAYMENT_METHODS = ["CASH", "TRANSFER", "QRIS", "OTHER"] as const;
-export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
+/**
+ * Input form untuk satu item produksi.
+ */
+export interface ProductionItemFormValues {
+  productVariantId: string;
+  quantity: string;
+  note: string;
+}
 
-/** Jenis operational task; task dihitung dari transaksi, bukan disimpan (D-06). */
-export const TASK_TYPES = [
-  "DELIVERY",
-  "RECONCILIATION",
-  "PAYMENT_COLLECTION",
-] as const;
-export type TaskType = (typeof TASK_TYPES)[number];
+/**
+ * Input form koleksi item produksi untuk satu batch.
+ */
+export interface ProductionItemsFormValues {
+  items: ProductionItemFormValues[];
+}
+

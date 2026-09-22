@@ -1,0 +1,52 @@
+TASK ID: BL-017-01
+TITLE: Klarifikasi prefix nomor batch
+STATUS: TODO
+
+BACKLOG: BL-017 — Req review
+REQUIREMENTS: AGENTS.md §2, §14, §37; docs/09-Decision-Log.md
+ACCEPTANCE CRITERIA: — (klarifikasi requirement)
+
+OBJECTIVE:
+Klarifikasi prefix nomor batch.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

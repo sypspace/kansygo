@@ -1,0 +1,42 @@
+TASK ID: BL-005-04
+TITLE: Repository Production Batch
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: FR-PD-001, FR-PD-006; BR-PD-002; D-08
+ACCEPTANCE CRITERIA: AC-PD-001
+
+SCOPE:
+Repository produksi batch: list (filter status, tanggal produksi, pencarian batch number/keterangan),
+findById, insert, update (tanggal & keterangan), setStatus, delete (khusus batch DRAFT), dan
+countByProductionDate untuk penomoran batch.
+
+IMPLEMENTATION:
+src/data/repositories/productionBatchRepository.ts.
+
+FILES CHANGED:
+- src/data/repositories/productionBatchRepository.ts
+
+TEST:
+Belum ada integration test repository produksi (lihat BL-005-13).
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode repository.
+
+ISSUES:
+`delete` menghapus baris secara fisik. Ini hanya sah untuk batch berstatus DRAFT
+(D-07 melarang penghapusan transaksi yang sudah menghasilkan movement); pemanggilan delete untuk
+batch FINAL harus dicegah di lapisan application dan belum diuji.
+
+DECISIONS:
+Nomor batch ditetapkan saat pembuatan dan tidak berubah walaupun tanggal produksi diubah
+(komentar pada src/domain/types.ts).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

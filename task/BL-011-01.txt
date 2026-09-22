@@ -1,0 +1,52 @@
+TASK ID: BL-011-01
+TITLE: Skema payments
+STATUS: TODO
+
+BACKLOG: BL-011 — Payment
+REQUIREMENTS: FR-PY-001..013; BR-PY-001..012; 05-Data-Model.md §23, §24, §24A; D-03, D-04, D-05
+ACCEPTANCE CRITERIA: AC-PY-001..006, AC-PY-008, AC-PY-009
+
+OBJECTIVE:
+Skema payments.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

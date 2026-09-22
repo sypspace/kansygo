@@ -1,0 +1,48 @@
+TASK ID: BL-015-01
+TITLE: Audit akses SQL langsung & batas layer
+STATUS: DONE
+
+BACKLOG: BL-015 — Architecture & data-model alignment
+REQUIREMENTS: `AGENTS.md` §15 (Architecture); `08-Technical-Architecture.md` §3
+ACCEPTANCE CRITERIA: AC-FU-002 (business logic tidak bergantung pada implementasi database)
+
+SCOPE:
+Audit konsinyasi: memastikan UI dan domain tidak mengakses SQLite secara langsung dan tidak memuat SQL,
+serta memastikan dependency mengarah satu arah (app/ui → application → domain/data).
+
+IMPLEMENTATION:
+Tidak ada perubahan kode. Audit dijalankan sebagai bagian dari reconciliation (AGENTS.md §11 Step 1-2)
+dan hasilnya menjadi dasar keputusan `NO_ACTION` pada `BACKLOG.md` BL-015.
+
+FILES CHANGED:
+Tidak ada berkas aplikasi yang diubah (sesuai larangan perubahan implementasi pada sesi reconciliation).
+
+TEST:
+TIDAK BERLAKU (audit statis, bukan kode baru).
+
+PREVIEW:
+TIDAK BERLAKU.
+
+VERIFICATION:
+DONE — hasil audit dapat direproduksi dan diverifikasi:
+1. `grep -rnE '(SELECT |INSERT INTO|UPDATE |DELETE FROM)' src` → seluruh hasil berada di src/data/**;
+   tidak ada SQL di src/app, src/ui, src/application, src/domain, maupun src/platform.
+2. `grep -rn 'expo-sqlite' src` → hanya src/data/db/expoSqliteExecutor.ts dan
+   src/ui/providers/AppProvider.tsx (composition root).
+3. `grep -rn "from \"react\"" src/domain src/application src/data` → tidak ada hasil; domain dan data
+   tidak bergantung pada React.
+
+EVIDENCE:
+Output ketiga perintah grep di atas, dijalankan 2026-09-22, dicatat pada `BACKLOG.md` §5 dan laporan reconciliation.
+
+ISSUES:
+Temuan: pembukaan koneksi database dilakukan di src/ui/providers/AppProvider.tsx.
+Dinilai NO_ACTION karena AppProvider berperan sebagai composition root dan tidak memuat aturan bisnis.
+
+DECISIONS:
+Tidak dibuatkan task migrasi karena perubahan hanya bersifat gaya penempatan berkas tanpa manfaat nyata
+(`AGENTS.md` §12 reconciliation: hindari tugas migrasi yang tidak bermanfaat).
+
+NOTES:
+Log ini dibuat pada 2026-09-22 saat reconciliation AGENTS.md dan merupakan satu-satunya task yang benar-benar
+diverifikasi pada sesi tersebut.
