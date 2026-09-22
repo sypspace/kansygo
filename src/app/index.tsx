@@ -1,21 +1,53 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 import { formatRupiah } from "@/domain/money";
+import type { Agent, ProductVariant } from "@/domain/master/types";
+import { ListRow } from "@/ui/components/ListRow";
+import { Screen } from "@/ui/components/Screen";
+import { useAppServices } from "@/ui/providers/AppProvider";
 import { colors, spacing, typography } from "@/ui/theme";
 
 /**
- * Placeholder Dashboard.
+ * Dashboard sementara untuk Fase 1.
  *
- * Isi sebenarnya (task operasional, outstanding, low stock) dikerjakan pada Fase 7
- * dan hanya boleh berasal dari data transaksi (BR-DB-002, BR-DB-003).
+ * Ringkasan operasional (delivery, reconciliation, outstanding) masih bernilai 0
+ * karena modulnya belum dibangun. Isi sebenarnya dikerjakan pada Fase 7 dan harus
+ * berasal dari data transaksi (BR-DB-002, BR-DB-003).
  */
 export default function DashboardScreen() {
+  const router = useRouter();
+  const { products, agents } = useAppServices();
+
+  const [activeProducts, setActiveProducts] = useState<ProductVariant[]>([]);
+  const [activeAgents, setActiveAgents] = useState<Agent[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+
+      void (async () => {
+        const [productList, agentList] = await Promise.all([products.list(), agents.list()]);
+
+        if (!cancelled) {
+          setActiveProducts(productList);
+          setActiveAgents(agentList);
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [products, agents]),
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <Screen>
       <Text style={styles.title}>Hari ini</Text>
       <Text style={styles.subtitle}>
-        Belum ada data operasional. Modul production, delivery, dan settlement
-        dibangun pada fase berikutnya.
+        Belum ada data operasional. Modul production, delivery, dan settlement dibangun pada fase
+        berikutnya.
       </Text>
 
       <View style={styles.card}>
@@ -32,17 +64,28 @@ export default function DashboardScreen() {
         <Text style={styles.cardLabel}>TIDAK HABIS belum direkonsiliasi</Text>
         <Text style={styles.cardValue}>0</Text>
       </View>
-    </ScrollView>
+
+      <Text style={styles.sectionTitle}>Master Data</Text>
+      <ListRow
+        title="Produk"
+        subtitle={`${activeProducts.length} produk aktif`}
+        onPress={() => router.push("/products")}
+      />
+      <ListRow
+        title="Agent"
+        subtitle={`${activeAgents.length} agent aktif`}
+        onPress={() => router.push("/agents")}
+      />
+      <ListRow
+        title="Pengaturan"
+        subtitle="Business profile, user profile"
+        onPress={() => router.push("/settings")}
+      />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: spacing.lg,
-    gap: spacing.md,
-    backgroundColor: colors.background,
-    flexGrow: 1,
-  },
   title: {
     fontSize: typography.title,
     fontWeight: "700",
@@ -51,6 +94,12 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: typography.body,
     color: colors.textMuted,
+  },
+  sectionTitle: {
+    fontSize: typography.heading,
+    fontWeight: "600",
+    color: colors.text,
+    marginTop: spacing.sm,
   },
   card: {
     backgroundColor: colors.surface,

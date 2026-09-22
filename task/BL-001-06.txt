@@ -1,0 +1,44 @@
+TASK ID: BL-001-06
+TITLE: SQLite executor (adapter expo-sqlite & node:sqlite)
+STATUS: TESTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `08-Technical-Architecture.md` §3, §11; `AGENTS.md` §18
+ACCEPTANCE CRITERIA: AC-DI-001
+
+SCOPE:
+Interface SqlExecutor (execAsync, runAsync, getAllAsync, getFirstAsync, transactionAsync);
+adapter runtime expo-sqlite dengan WAL + foreign_keys ON;
+adapter test node:sqlite dengan BEGIN IMMEDIATE/COMMIT/ROLLBACK dan guard transaksi bersarang (khusus test).
+
+IMPLEMENTATION:
+src/data/db/types.ts (interface), src/data/db/expoSqliteExecutor.ts (adapter runtime + prepareExpoSqliteDatabase),
+src/data/db/testing/nodeSqliteExecutor.ts (adapter test), src/data/db/testing/createMigratedTestDatabase.ts.
+
+FILES CHANGED:
+- src/data/db/types.ts
+- src/data/db/expoSqliteExecutor.ts
+- src/data/db/testing/nodeSqliteExecutor.ts
+- src/data/db/testing/createMigratedTestDatabase.ts
+
+TEST:
+Adapter node:sqlite teruji melalui src/data/db/migrations.test.ts (jalur migrasi, transaksi, dan constraint).
+
+PREVIEW:
+UNKNOWN — aplikasi belum pernah dijalankan dengan bukti tersimpan.
+
+VERIFICATION:
+UNKNOWN untuk adapter expo-sqlite: adaptor ini hanya berjalan saat runtime aplikasi dan belum diverifikasi pada device.
+
+EVIDENCE:
+Output `npx jest` 2026-09-22.
+
+ISSUES:
+Adapter expo memakai withTransactionAsync (non-exclusive). Asumsi single-user dicatat pada komentar kode
+dan belum diverifikasi pada device.
+
+DECISIONS:
+SQLite melalui expo-sqlite; akses hanya melalui repository.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

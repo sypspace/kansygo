@@ -1,0 +1,41 @@
+TASK ID: BL-001-09
+TITLE: Dashboard placeholder (Fase 1)
+STATUS: TESTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: FR-DB-001 (parsial); BR-DB-002, BR-DB-003
+ACCEPTANCE CRITERIA: AC-APP-001 (smoke test); AC-DB-001 belum terpenuhi
+
+SCOPE:
+Layar awal menampilkan judul "Hari ini", tiga kartu ringkasan (Outstanding, Delivery belum dikonfirmasi,
+TIDAK HABIS belum direkonsiliasi) bernilai 0 sebagai placeholder, serta navigasi ke Produk, Agent, dan Pengaturan
+beserta jumlah master aktif.
+
+IMPLEMENTATION:
+Dashboard mengambil daftar produk dan agent aktif dari use case master data; nilai transaksi masih hardcoded 0
+karena modul transaksi belum dibangun.
+
+FILES CHANGED:
+- src/app/index.tsx
+- src/__tests__/dashboard.test.tsx
+
+TEST:
+src/__tests__/dashboard.test.tsx lulus pada reconciliation (1 smoke test; expo-router dan AppProvider di-mock).
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — angka ringkasan sengaja placeholder dan belum boleh dianggap memenuhi BR-DB-002.
+
+EVIDENCE:
+Output `npx jest` 2026-09-22 (suite src/__tests__/dashboard.test.tsx PASS).
+
+ISSUES:
+Ringkasan hardcoded 0 wajib diganti data transaksi (BL-012-02).
+
+DECISIONS:
+Placeholder diberi label eksplisit agar tidak disalahartikan sebagai data operasional nyata.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

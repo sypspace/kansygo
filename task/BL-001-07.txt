@@ -1,0 +1,49 @@
+TASK ID: BL-001-07
+TITLE: Komponen UI dasar & theme
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `04-UX-Flows.md` §2 (UX-001 s.d. UX-007); `08-Technical-Architecture.md` §3
+ACCEPTANCE CRITERIA: AC-UX-004 (indikator non-warna)
+
+SCOPE:
+Screen (scroll/aman area), AppButton (primary/secondary/danger + loading & disabled), TextField (label, error,
+hint, testID), ListRow, Card, EmptyState, StatusPill, theme (colors/spacing/radius/typography), formatter tampilan.
+
+IMPLEMENTATION:
+Komponen kecil berulang dipakai seluruh layar master data; StatusPill memakai indikator non-warna sehingga
+status terbaca tanpa bergantung penglihatan warna.
+
+FILES CHANGED:
+- src/ui/components/Screen.tsx
+- src/ui/components/AppButton.tsx
+- src/ui/components/TextField.tsx
+- src/ui/components/ListRow.tsx
+- src/ui/components/Card.tsx
+- src/ui/components/EmptyState.tsx
+- src/ui/components/StatusPill.tsx
+- src/ui/theme.ts
+- src/ui/format.ts
+- src/ui/format.test.ts
+
+TEST:
+src/ui/format.test.ts lulus pada reconciliation. Tidak ada component test untuk komponen UI.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Output `npx jest` 2026-09-22 (suite src/ui/format.test.ts PASS).
+
+ISSUES:
+Kontrak Card mewajibkan children, sedangkan 3 layar memakai Card hanya dengan title/subtitle sehingga
+`tsc` gagal (lihat BL-001-11).
+
+DECISIONS:
+Nilai visual bukan business rule; perhitungan bisnis tidak boleh berada di lapisan UI.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

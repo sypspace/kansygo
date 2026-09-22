@@ -1,0 +1,41 @@
+TASK ID: BL-004-02
+TITLE: Repository User Profile
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-004 — Business Profile & User Profile
+REQUIREMENTS: FR-US-001; BR-US-001, BR-US-003; `05-Data-Model.md` §5; D-01, D-09
+ACCEPTANCE CRITERIA: AC-US-001
+
+SCOPE:
+Repository user profile: getFirst(), insert(record), update(id, changes).
+Kolom: id (UUID), name, email, role, profile_info, created_at, updated_at.
+
+IMPLEMENTATION:
+src/data/repositories/userRepository.ts. getFirst mengambil satu baris (MVP single operational user,
+BR-US-001). role disimpan dengan CHECK ('OWNER_ADMIN','PRODUCTION','DELIVERY') dan belum dipakai
+membatasi akses (D-01).
+
+FILES CHANGED:
+- src/data/repositories/userRepository.ts
+
+TEST:
+Belum ada integration test repository user (lihat BL-004-08).
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode repository.
+
+ISSUES:
+role belum dipakai untuk apa pun pada MVP; kesiapannya untuk future multi-user perlu dijaga saat
+authentication mulai dipertimbangkan.
+
+DECISIONS:
+D-01: MVP tanpa pemisahan role atau gating UI; kolom role hanya persiapan future.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

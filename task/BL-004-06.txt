@@ -1,0 +1,40 @@
+TASK ID: BL-004-06
+TITLE: Layar Business Profile
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-004 — Business Profile & User Profile
+REQUIREMENTS: FR-BP-001, FR-BP-002; D-15
+ACCEPTANCE CRITERIA: AC-BP-001, AC-BP-002
+
+SCOPE:
+Layar business profile: memuat profil bisnis (bila ada), form untuk nama, nama legal, NPWP, alamat, telepon,
+email, logo, dan prefix invoice, dengan hint konteks pada NPWP dan prefix; kartu informasi saat pertama kali diisi;
+simpan dengan konfirmasi.
+
+IMPLEMENTATION:
+src/app/settings/business.tsx memakai useEntityForm dan use case businessProfile.
+Peringatan pemuatan ditampilkan inline, bukan menggagalkan seluruh layar.
+
+FILES CHANGED:
+- src/app/settings/business.tsx
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-BP-001/AC-BP-002.
+
+EVIDENCE:
+Kode layar; rute settings/business terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Layar ini memakai Card hanya dengan title/subtitle sehingga `tsc` gagal (BL-001-11).
+
+DECISIONS:
+Logo masih berupa input lokasi file/URL; integrasi pemilih berkas belum ditetapkan requirement-nya.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

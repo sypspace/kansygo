@@ -1,0 +1,40 @@
+TASK ID: BL-005-05
+TITLE: Repository Production Item
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-005 — Production (Fase 2)
+REQUIREMENTS: FR-PD-002, FR-PD-003; BR-PD-003, BR-PD-004
+ACCEPTANCE CRITERIA: AC-PD-001, AC-PD-002
+
+SCOPE:
+Repository item produksi: list (filter batch), findById, findByBatchIdAndProductVariantId,
+insert, update, delete, dan deleteByBatchId.
+
+IMPLEMENTATION:
+src/data/repositories/productionItemRepository.ts. Satu varian hanya boleh satu entry per batch,
+dijamin juga oleh UNIQUE (production_batch_id, product_variant_id) pada skema v2.
+
+FILES CHANGED:
+- src/data/repositories/productionItemRepository.ts
+
+TEST:
+Belum ada integration test repository item produksi (lihat BL-005-13); UNIQUE constraint belum diuji khusus.
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN.
+
+EVIDENCE:
+Kode repository.
+
+ISSUES:
+Total produksi dihitung dari item (BR-PD-004) tetapi belum ada fungsi perhitungan di domain;
+wajib ada saat layar produksi dibangun (BL-005-10).
+
+DECISIONS:
+Total tidak disimpan sebagai sumber kebenaran terpisah (`05-Data-Model.md` §9).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

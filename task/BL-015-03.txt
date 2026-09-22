@@ -1,0 +1,52 @@
+TASK ID: BL-015-03
+TITLE: Migrasi bentuk stock_movements
+STATUS: TODO
+
+BACKLOG: BL-015 — Architecture
+REQUIREMENTS: AGENTS.md §15, §18, §19, §22; 08-Technical-Architecture.md §3, §11; 05-Data-Model.md §25 s.d. §30, §38
+ACCEPTANCE CRITERIA: AC-DI-001, AC-DI-002, AC-FU-001, AC-FU-002
+
+OBJECTIVE:
+Migrasi bentuk stock_movements.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

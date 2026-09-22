@@ -1,0 +1,44 @@
+TASK ID: BL-001-08
+TITLE: AppProvider & composition root layanan
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: FR-APP-001, FR-APP-002; `08-Technical-Architecture.md` §3; D-11
+ACCEPTANCE CRITERIA: AC-APP-001, AC-APP-002 (prasyarat)
+
+SCOPE:
+Pembukaan database kansygo.db, menjalankan migrasi, membangun AppServices (products, agents, businessProfile,
+userProfile) dan menyediakannya melalui context useAppServices; layar loading dan layar error dengan tombol
+"coba lagi"; root Stack expo-router berisi seluruh route yang tersedia.
+
+IMPLEMENTATION:
+AppProvider (src/ui/providers/AppProvider.tsx) + buildAppServices sebagai composition root application layer;
+src/app/_layout.tsx menyusun route produk, agent, dan pengaturan.
+
+FILES CHANGED:
+- src/ui/providers/AppProvider.tsx
+- src/ui/providers/buildAppServices.ts
+- src/app/_layout.tsx
+
+TEST:
+src/__tests__/dashboard.test.tsx mem-mock provider, sehingga provider belum tercakup test otomatis.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti aplikasi dijalankan.
+
+VERIFICATION:
+UNKNOWN — AC-APP-001 dan AC-APP-002 belum diverifikasi.
+
+EVIDENCE:
+Kode; perubahan src/app/_layout.tsx pada working tree (belum di-commit) saat reconciliation.
+
+ISSUES:
+- eslint error react-hooks/set-state-in-effect pada AppProvider baris 36 (lihat BL-001-11).
+- Pembukaan database berada di lapisan ui; dinilai NO_ACTION (`BACKLOG.md` BL-015).
+
+DECISIONS:
+Tanpa authentication pada MVP (D-11); operasi inti tidak bergantung akun atau internet.
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.
+Berkas ini termasuk pekerjaan yang belum di-commit pada saat reconciliation.

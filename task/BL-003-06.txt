@@ -1,0 +1,39 @@
+TASK ID: BL-003-06
+TITLE: Layar detail/edit/deaktivasi agent
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-003 — Agent (master data)
+REQUIREMENTS: FR-AG-003, FR-AG-004, FR-AG-005, FR-AG-007; BR-AG-002, BR-AG-003; D-13
+ACCEPTANCE CRITERIA: AC-AG-002, AC-AG-004 (fee historis)
+
+SCOPE:
+Layar detail agent: ringkasan (nama, fee per unit, kontak, alamat, lokasi, status, timestamp),
+form edit in-place, penyimpanan perubahan, serta aksi aktifkan/nonaktifkan dengan konfirmasi.
+
+IMPLEMENTATION:
+src/app/agents/[id].tsx memuat agent berdasarkan parameter rute dan memanggil agents.update / agents.setActive.
+
+FILES CHANGED:
+- src/app/agents/[id].tsx
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — belum diverifikasi terhadap AC-AG-002.
+
+EVIDENCE:
+Kode layar; rute agents/[id] terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Lint error react-hooks/set-state-in-effect pada layar ini (BL-001-11).
+AC-AG-004 (fee historis tidak berubah setelah master diubah) hanya dapat diverifikasi setelah BL-010.
+
+DECISIONS:
+Nonaktif tidak menghapus agent; histori transaksi tetap memakai ID lama (BR-DI-004).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

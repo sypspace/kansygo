@@ -1,0 +1,44 @@
+TASK ID: BL-001-05
+TITLE: Skema master data v1 + kerangka migrasi SQLite
+STATUS: TESTED
+
+BACKLOG: BL-001 — Fondasi proyek & tooling
+REQUIREMENTS: `05-Data-Model.md` §4 s.d. §7, §37; BR-BP-001; D-09; D-13
+ACCEPTANCE CRITERIA: AC-DI-001
+
+SCOPE:
+Tabel business (baris tunggal, CHECK id = 1), users (CHECK role), product_variants (CHECK harga ≥ 0, is_active),
+agents (CHECK fee ≥ 0, is_active), app_settings; index idx_product_variants_active_name dan idx_agents_active_name;
+kerangka migrasi berbasis PRAGMA user_version dengan transaksi per migrasi.
+
+IMPLEMENTATION:
+src/data/db/schema/v1.ts (V1_SQL); src/data/db/migrations.ts (MIGRATIONS, runMigrations, getSchemaVersion,
+CURRENT_SCHEMA_VERSION); abstraksi SqlExecutor di src/data/db/types.ts; PRAGMA foreign_keys=ON sebelum migrasi.
+
+FILES CHANGED:
+- src/data/db/schema/v1.ts
+- src/data/db/migrations.ts
+- src/data/db/types.ts
+- src/data/db/migrations.test.ts
+
+TEST:
+src/data/db/migrations.test.ts pada reconciliation: 3 test lulus (versi skema terbaru, idempoten,
+constraint AC-DI-001), 1 test gagal karena daftar index belum mencakup index skema v2 (lihat BL-005-03).
+
+PREVIEW:
+TIDAK BERLAKU (lapisan data).
+
+VERIFICATION:
+UNKNOWN — verifikasi formal AC-DI-001 belum dilakukan.
+
+EVIDENCE:
+Output `npx jest src/data/db/migrations.test.ts` 2026-09-22.
+
+ISSUES:
+Tabel app_settings belum dipakai kode mana pun (TD-05). Migrasi v2 menambah index tanpa memperbarui test.
+
+DECISIONS:
+Skema v1 sengaja dibatasi pada tabel yang benar-benar dipakai Fase 1 (`schema/v1.ts`).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

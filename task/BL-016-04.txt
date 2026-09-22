@@ -1,0 +1,52 @@
+TASK ID: BL-016-04
+TITLE: Selaraskan .clinerules dengan AGENTS.md
+STATUS: TODO
+
+BACKLOG: BL-016 — Doc sync
+REQUIREMENTS: AGENTS.md §9, §13, §35
+ACCEPTANCE CRITERIA: — (artefak manajemen kerja)
+
+OBJECTIVE:
+Selaraskan .clinerules dengan AGENTS.md.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.

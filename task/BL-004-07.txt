@@ -1,0 +1,38 @@
+TASK ID: BL-004-07
+TITLE: Layar User Profile
+STATUS: IMPLEMENTED
+
+BACKLOG: BL-004 — Business Profile & User Profile
+REQUIREMENTS: FR-US-001, FR-US-002, FR-US-003; BR-US-002; D-01, D-11
+ACCEPTANCE CRITERIA: AC-US-001, AC-US-002
+
+SCOPE:
+Layar user profile: memuat profil pengguna operasional, menampilkan role saat ini (informasi, bukan gating),
+form nama/email/info tambahan, dan simpan dengan konfirmasi.
+
+IMPLEMENTATION:
+src/app/settings/user.tsx memakai useEntityForm dan use case userProfile; role dibaca dari profil tersimpan.
+
+FILES CHANGED:
+- src/app/settings/user.tsx
+
+TEST:
+Tidak ada component test untuk layar ini.
+
+PREVIEW:
+UNKNOWN — tidak ada bukti preview tersimpan.
+
+VERIFICATION:
+UNKNOWN — verifikasi AC-US-002 (operasi inti tanpa authentication) menunggu preview aplikasi.
+
+EVIDENCE:
+Kode layar; rute settings/user terdaftar di src/app/_layout.tsx.
+
+ISSUES:
+Layar ini memakai Card hanya dengan title/subtitle sehingga `tsc` gagal (BL-001-11).
+
+DECISIONS:
+Role ditampilkan sebagai informasi dan tidak membatasi akses pada MVP (BR-US-002, D-01).
+
+NOTES:
+Log retrospektif dibuat 2026-09-22 saat reconciliation AGENTS.md; bersumber dari bukti repository, bukan catatan pelaksanaan asli.

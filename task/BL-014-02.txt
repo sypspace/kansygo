@@ -1,0 +1,52 @@
+TASK ID: BL-014-02
+TITLE: Backup opsional ke Google Drive
+STATUS: TODO
+
+BACKLOG: BL-014 — Backup
+REQUIREMENTS: FR-BK-001..010, FR-CR-001..005; BR-BK-001..009, BR-OF-001..006, BR-DI-004, BR-DI-005; D-07, D-12, D-13, D-14b
+ACCEPTANCE CRITERIA: AC-BK-005..007, AC-CR-001, AC-CR-002, AC-DI-005, AC-ERR-001..007
+
+OBJECTIVE:
+Backup opsional ke Google Drive.
+
+SCOPE:
+UNKNOWN — belum ditetapkan.
+
+DEPENDENCIES:
+UNKNOWN — belum ditetapkan.
+
+IMPLEMENTATION:
+Not started.
+
+FILES CHANGED:
+Tidak ada.
+
+TEST:
+Not started.
+
+TEST RESULT:
+Tidak ada.
+
+PREVIEW:
+Not started.
+
+PREVIEW RESULT:
+Tidak ada.
+
+VERIFICATION:
+Not started.
+
+VERIFICATION RESULT:
+Tidak ada.
+
+EVIDENCE:
+Tidak ada.
+
+ISSUES:
+Tidak ada.
+
+DECISIONS:
+Tidak ada.
+
+NOTES:
+Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.
