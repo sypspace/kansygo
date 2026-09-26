@@ -1,52 +1,119 @@
 TASK ID: BL-005-01
 TITLE: Pulihkan build: tipe domain & konstanta hilang, stockMovementRepository
-STATUS: TODO
+STATUS: IMPLEMENTED
 
 BACKLOG: BL-005 — Production
-REQUIREMENTS: FR-PD-001..007; BR-PD-001..007; 05-Data-Model.md §8-§9; D-07, D-08, D-10, D-18; FR-IV-004
+REQUIREMENTS: FR-PD-001..007; BR-PD-001..007; 05-Data-Model.md §8-§9, §26, §27, §29; D-07, D-08, D-10, D-18; FR-IV-004
 ACCEPTANCE CRITERIA: AC-PD-001..004, AC-IV-001
 
 OBJECTIVE:
 Pulihkan build: tipe domain & konstanta hilang, stockMovementRepository.
 
 SCOPE:
-UNKNOWN — belum ditetapkan.
+Minimum safe scope (analisis terarah 2026-09-23, disetujui user):
+1. src/domain/types.ts — pulihkan 3 pasang konstanta+type yang hilang
+   (STOCK_MOVEMENT_TYPES/StockMovementType, INVENTORY_LOCATIONS/InventoryLocation,
+   STOCK_SOURCE_TYPES/StockSourceType) verbatim dari commit bootstrap 9f832d5,
+   diverifikasi terhadap 05-Data-Model.md §26/§27/§29 dan CHECK constraint skema v2.
+2. src/domain/production/validation.ts — perbaiki import (FieldErrors dari ../errors,
+   collect dari ../validation); ubah validateProductionBatchForm mengembalikan
+   ValidationResult<{productionDate, notes}> sehingga .value tersedia.
+   Aturan validasi bisnis tidak diubah.
+3. src/application/production/productionService.ts — split import: ProductVariant
+   dari ../../domain/master/types. TIDAK mengimplementasikan updateBatch,
+   deleteBatch, addItem, removeItem, saveToStock (scope BL-005-08).
+4. src/data/repositories/stockMovementRepository.ts (file baru) — interface/port
+   StockMovementRepository saja, bertipe pada entity domain StockMovement
+   (bukan parameter per-kolom SQL), tanpa factory/SQL/adapter.
+   Implementasi SQL = BL-005-06; representasi kolom menunggu BL-017-03.
+
+DI LUAR SCOPE (eksplisit):
+- 5 method ProductionService (BL-005-08, IN_PROGRESS)
+- implementasi SQL repository (BL-005-06)
+- 6 konstanta TD-04 sisanya (BL-015-02)
+- migrasi bentuk stock_movements (BL-015-03, menunggu BL-017-03)
+- migrations.test.ts (BL-005-03)
+- penghapusan helper yang hanya menghasilkan warning eslint (dipakai BL-005-08)
+- mempersempit interface ProductionService
 
 DEPENDENCIES:
-UNKNOWN — belum ditetapkan.
+- Verifikasi konstanta: git history 9f832d5 (nilai asli), docs/05-Data-Model.md
+  §26/§27/§29, CHECK constraint src/data/db/schema/v2.ts.
+- BL-017-03 TIDAK diperlukan untuk scope ini: konstanta dibutuhkan kedua bentuk
+  representasi; interface repository bertipe entity sehingga keputusan representasi
+  tidak mengubah kontrak.
 
 IMPLEMENTATION:
-Not started.
+- src/domain/types.ts: 3 konstanta + 3 type dipulihkan (restorasi, bukan desain baru).
+- src/domain/production/validation.ts: import diperbaiki; validateProductionBatchForm
+  kini `return collect(errors, {...})` langsung dengan return type ValidationResult.
+- src/application/production/productionService.ts: hanya import ProductVariant
+  dipindah ke ../../domain/master/types (deklarasi import dipecah).
+- src/data/repositories/stockMovementRepository.ts: dibuat; berisi
+  ListStockMovementsParams + interface StockMovementRepository
+  (insert/findById/list, bertipe StockMovement).
 
 FILES CHANGED:
-Tidak ada.
+- src/domain/types.ts
+- src/domain/production/validation.ts
+- src/application/production/productionService.ts
+- src/data/repositories/stockMovementRepository.ts (baru)
 
 TEST:
-Not started.
+- `npx tsc --noEmit` (2026-09-23, branch fix/BL-005-01-restore-production-types):
+  tersisa TEPAT 1 error — productionService.ts(61,3) TS2739: objek kembalian
+  createProductionService kehilangan updateBatch, deleteBatch, addItem, removeItem,
+  saveToStock. Error ini adalah KNOWN REMAINING ERROR milik BL-005-08 (task
+  IN_PROGRESS), BUKAN error yang harus diselesaikan BL-005-01. 10 error lainnya
+  (konstanta hilang, import salah, .value validasi) sudah teratasi.
+  Karena itu tsc TIDAK diklaim green/exit 0.
+- `npx eslint .`: exit 0 — 0 error, 5 warning no-unused-vars di
+  productionService.ts (pre-existing, helper akan dipakai BL-005-08; di luar scope).
+- `npx jest`: 4/5 suite lulus, 31/32 test lulus; 1 suite gagal
+  (migrations.test.ts, daftar index skema v2) — kondisi sama seperti sebelum
+  perubahan (TD-02, milik BL-005-03), bukan regresi dari BL-005-01.
 
 TEST RESULT:
-Tidak ada.
+- 10/11 error tsc teratasi; 1 error tersisa = BL-005-08 (tercatat eksplisit).
+- ESLint: 0 error (tidak berubah).
+- Jest: tidak ada regresi (1 fail pre-existing milik BL-005-03).
 
 PREVIEW:
-Not started.
+Not started — perubahan bersifat tipe/konstanta domain tanpa perubahan UI;
+preview menyusul bersama BL-005-13 (verifikasi produksi) atau saat BL-005-08
+menuntaskan alur produksi.
 
 PREVIEW RESULT:
 Tidak ada.
 
 VERIFICATION:
-Not started.
+- Scope: seluruh 4 file sesuai scope yang disetujui; tidak ada perubahan di luar scope.
+- Nilai konstanta terverifikasi identik dengan 9f832d5, §26/§27/§29, CHECK v2.
+- Interface repository bertipe entity StockMovement → tahan terhadap keputusan
+  BL-017-03 (risiko rework minimal).
 
 VERIFICATION RESULT:
-Tidak ada.
+IMPLEMENTED — verifikasi penuh (TESTED/PREVIEWED/VERIFIED) belum: sisa error
+tsc milik BL-005-08 harus dituntaskan dan test suite migration (BL-005-03)
+belum hijau; preview produksi belum dijalankan.
 
 EVIDENCE:
-Tidak ada.
+- Output `npx tsc --noEmit` 2026-09-23: 1 error (TS2739, productionService.ts:61)
+  — milik BL-005-08.
+- Output `npx eslint .`: exit 0, 0 error, 5 warning (pre-existing).
+- Output `npx jest`: 1 failed suite (migrations.test.ts, pre-existing), 4 pass.
+- Branch: fix/BL-005-01-restore-production-types (bekerja dari main yang bersih).
 
 ISSUES:
-Tidak ada.
+- Tsc belum exit 0 karena error #3 (5 method ProductionService) milik BL-005-08
+  — dianalisis sebelum implementasi dan dikonfirmasi setelah implementasi.
 
 DECISIONS:
-Tidak ada.
+- Konstanta dipulihkan verbatim (restorasi), bukan dirancang ulang — menghindari
+  keputusan domain yang belum disetujui (AGENTS.md §14, §37).
+- stockMovementRepository.ts hanya port bertipe entity — memisahkan kontrak tipe
+  (BL-005-01) dari implementasi SQL (BL-005-06) dan representasi kolom (BL-017-03).
 
 NOTES:
-Log tugas dibuat 2026-09-22. Task berstatus TODO; file dibuat sesuai AGENTS.md §6, §9.
+- Log tugas dibuat 2026-09-22; diimplementasikan 2026-09-23 pada branch
+  fix/BL-005-01-restore-production-types. Commit/push tidak dilakukan (instruksi user).

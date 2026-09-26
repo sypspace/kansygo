@@ -19,6 +19,38 @@ export const STOCK_DIRECTIONS = ["IN", "OUT"] as const;
 export type StockDirection = (typeof STOCK_DIRECTIONS)[number];
 
 /**
+ * Sumber pergerakan inventory (05-Data-Model.md §26).
+ */
+export const STOCK_MOVEMENT_TYPES = [
+  "PRODUCTION",
+  "DELIVERY",
+  "RETURN",
+  "SOLD",
+  "WASTE",
+  "ADJUSTMENT",
+] as const;
+export type StockMovementType = (typeof STOCK_MOVEMENT_TYPES)[number];
+
+/**
+ * Lokasi inventory pada MVP (05-Data-Model.md §27).
+ */
+export const INVENTORY_LOCATIONS = ["OWNER", "AGENT"] as const;
+export type InventoryLocation = (typeof INVENTORY_LOCATIONS)[number];
+
+/**
+ * Jenis transaksi sumber stock movement (05-Data-Model.md §29).
+ */
+export const STOCK_SOURCE_TYPES = [
+  "PRODUCTION",
+  "DELIVERY",
+  "SALES_CONFIRMATION",
+  "RECONCILIATION",
+  "ADJUSTMENT",
+  "CORRECTION",
+] as const;
+export type StockSourceType = (typeof STOCK_SOURCE_TYPES)[number];
+
+/**
  * Record produksi batch.
  */
 export interface ProductionBatch {

@@ -7,13 +7,19 @@
  * - Kuantitas item harus > 0 untuk yang disimpan.
  */
 
+import type { FieldErrors } from "../errors";
 import type {
-  FieldErrors,
   ProductionBatchFormValues,
   ProductionItemFormValues,
   ProductionItemsFormValues,
 } from "../types";
-import { isoDate, positiveInteger, requiredText } from "../validation";
+import {
+  collect,
+  isoDate,
+  positiveInteger,
+  requiredText,
+  type ValidationResult,
+} from "../validation";
 import type { ProductVariant } from "../master/types";
 
 const NOTES_MAX = 240;
@@ -25,7 +31,7 @@ export type ProductionItemsValidationResult = ReturnType<typeof validateProducti
 
 export function validateProductionBatchForm(
   values: ProductionBatchFormValues,
-): { ok: true } | { ok: false; errors: FieldErrors } {
+): ValidationResult<{ productionDate: string; notes: string }> {
   const errors: FieldErrors = {};
 
   const productionDate = isoDate(values.productionDate, "productionDate", "Tanggal produksi");
@@ -37,9 +43,7 @@ export function validateProductionBatchForm(
   return collect(errors, {
     productionDate: productionDate.value,
     notes: notes.value,
-  }).ok
-    ? { ok: true }
-    : { ok: false, errors };
+  });
 }
 
 export function validateProductionItemForm(
