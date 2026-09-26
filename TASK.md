@@ -91,7 +91,7 @@ Kolom **Log** berisi `task/[task-id].txt`. Task berstatus `TODO` belum memiliki 
 
 | Task ID | Task | Status | Log |
 | ------- | ---- | ------ | --- |
-| BL-005-01 | Pulihkan build produksi: tipe domain & konstanta yang hilang, `stockMovementRepository` | TODO | — |
+| BL-005-01 | Pulihkan build produksi: tipe domain & konstanta yang hilang, `stockMovementRepository` | IMPLEMENTED | `task/BL-005-01.txt` |
 | BL-005-02 | Skema v2 (`production_batches`, `production_items`, `stock_movements`) | IMPLEMENTED | `task/BL-005-02.txt` |
 | BL-005-03 | Perbarui `migrations.test.ts` untuk skema v2 | TODO | — |
 | BL-005-04 | Repository Production Batch | IMPLEMENTED | `task/BL-005-04.txt` |

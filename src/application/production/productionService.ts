@@ -3,7 +3,15 @@ import type { ProductionBatchRepository } from "../../data/repositories/producti
 import type { ProductionItemRepository } from "../../data/repositories/productionItemRepository";
 import type { StockMovementRepository } from "../../data/repositories/stockMovementRepository";
 import { BusinessRuleError, NotFoundError, ValidationError } from "../../domain/errors";
-import type { ProductionBatch, ProductionBatchFormValues, ProductionBatchStatus, ProductionItem, ProductionItemFormValues, ProductionItemsFormValues, ProductVariant } from "../../domain/types";
+import type { ProductVariant } from "../../domain/master/types";
+import type {
+  ProductionBatch,
+  ProductionBatchFormValues,
+  ProductionBatchStatus,
+  ProductionItem,
+  ProductionItemFormValues,
+  ProductionItemsFormValues,
+} from "../../domain/types";
 import { validateProductionBatchForm, validateProductionItemsForm, validateProductionItemForm } from "../../domain/production/validation";
 import { generateBatchNumber } from "../../data/db/schema/v2";
 import type { Clock, IdGenerator } from "../ports";
